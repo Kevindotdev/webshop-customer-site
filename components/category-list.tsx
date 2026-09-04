@@ -13,10 +13,10 @@ export function CategoryList() {
                     <a
                         key={name}
                         href="#"
-                        className="group flex flex-col items-center justify-center rounded-lg border border-gray-200 bg-white py-7 transition-colors hover:border-gray-300"
+                        className="group flex flex-col items-center justify-center rounded-lg border border-border bg-surface py-7 transition-colors hover:border-foreground"
                     >
                         <Icon
-                            className="h-8 w-8 text-gray-500 transition-colors group-hover:text-gray-700"
+                            className="h-8 w-8 text-muted-foreground transition-colors group-hover:text-foreground"
                             strokeWidth={1.5}
                         />
 
