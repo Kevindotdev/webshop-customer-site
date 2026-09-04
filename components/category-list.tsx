@@ -8,6 +8,7 @@ export function CategoryList() {
             </h2>
 
             <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+                {/* Show only the first five categories on the homepage. */}
                 {storeCategories.slice(0, 5).map(({ name, icon: Icon }) => (
                     <a
                         key={name}

@@ -9,6 +9,7 @@ import {
   Dumbbell,
 } from "lucide-react";
 
+// Group API categories into broader storefront categories for the customer UI.
 export const storeCategories = [
   {
     name: "Elektronik",

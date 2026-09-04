@@ -6,6 +6,7 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+    // Calculate the selling price after applying the product discount
     const discountedPrice =
         product.discountPercentage && product.discountPercentage > 0
             ? product.price * (1 - product.discountPercentage / 100)
