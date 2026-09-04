@@ -1,0 +1,21 @@
+import type { ProductsResponse } from "@/app/types";
+
+const API_URL = "http://localhost:4000";
+const defaultLimit = 6;
+
+export default class ProductService {
+    static async getProducts(
+        currentPage = 1,
+        limit = defaultLimit,
+    ): Promise<ProductsResponse> {
+        const response = await fetch(
+            `${API_URL}/products?_page=${currentPage}&_limit=${limit}&_sort=id&_order=desc&_expand=category`,
+        );
+
+        if (!response.ok) {
+            throw new Error("Failed to fetch products");
+        }
+
+        return response.json();
+    }
+}
