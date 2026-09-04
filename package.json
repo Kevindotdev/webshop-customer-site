@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --port 3001",
     "mock-server": "json-server --watch server/products.json --middlewares server/middleware.js --port 4000",
     "dev:full": "concurrently \"npm run dev\" \"npm run mock-server\"",
     "build": "next build",
