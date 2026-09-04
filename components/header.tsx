@@ -5,6 +5,7 @@ import {
     ShoppingCart,
     User,
 } from "lucide-react";
+import { ThemeToggle } from "./theme-toggle";
 
 export function Header() {
     return (
@@ -54,6 +55,8 @@ export function Header() {
                         <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
                     </div>
 
+                    <ThemeToggle />
+
                     <button
                         type="button"
                         aria-label="Konto"
@@ -87,6 +90,8 @@ export function Header() {
                     >
                         <Search className="h-5 w-5" strokeWidth={1.6} />
                     </button>
+
+                    <ThemeToggle />
 
                     <button
                         type="button"
