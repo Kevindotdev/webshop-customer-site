@@ -1,9 +1,8 @@
-import CategoryService from "@/services/category-service";
 import ProductService from "@/services/product-service";
 import { Header } from "@/components/header";
 import { Hero } from "@/components/hero";
 import { CategoryList } from "@/components/category-list";
-
+import { ProductGrid } from "@/components/products-grid";
 
 export default async function Home() {
   const { products } = await ProductService.getProducts();
@@ -17,7 +16,15 @@ export default async function Home() {
 
         <CategoryList />
 
-        {/* Products */}
+        <section id="products" className="mt-10">
+          <h2 className="text-lg font-semibold">
+            Populära produkter
+          </h2>
+
+          <div className="mt-4">
+            <ProductGrid products={products} />
+          </div>
+        </section>
       </main>
     </>
   );
