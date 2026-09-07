@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { storeCategories } from "@/lib/store-categories";
 
 export function CategoryFilter() {
@@ -8,22 +9,22 @@ export function CategoryFilter() {
             </h2>
 
             <nav className="mt-3">
-                <a
+                <Link
                     href="/products"
                     className="block text-sm font-medium"
                 >
                     Alla produkter
-                </a>
+                </Link>
 
                 <div className="mt-2 space-y-1">
                     {storeCategories.map(({ name }) => (
-                        <a
+                        <Link
                             key={name}
-                            href="#"
+                            href={`/products?category=${encodeURIComponent(name)}`}
                             className="block rounded-md px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                         >
                             {name}
-                        </a>
+                        </Link>
                     ))}
                 </div>
             </nav>
