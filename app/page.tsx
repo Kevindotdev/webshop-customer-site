@@ -10,8 +10,6 @@ export default async function Home() {
 
   return (
     <>
-      <Header />
-
       <main className="mx-auto max-w-7xl px-6 py-6">
         <Hero />
 
