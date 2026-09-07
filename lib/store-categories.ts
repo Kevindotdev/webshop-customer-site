@@ -7,6 +7,7 @@ import {
   Sparkles,
   Car,
   Dumbbell,
+  Utensils,
 } from "lucide-react";
 
 // Group API categories into broader storefront categories for the customer UI.
@@ -46,6 +47,7 @@ export const storeCategories = [
       "womens-watches",
       "sunglasses",
       "womens-jewellery",
+      "womens-bags",
     ],
   },
   {
@@ -64,6 +66,13 @@ export const storeCategories = [
       "beauty",
       "fragrances",
       "skin-care",
+    ],
+  },
+  {
+    name: "Mat & Dryck",
+    icon: Utensils,
+    slugs: [
+      "groceries",
     ],
   },
   {
