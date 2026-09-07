@@ -107,7 +107,7 @@ export function ProductCard({ product }: ProductCardProps) {
                     <button
                         type="button"
                         aria-label={`Lägg ${product.title} i varukorg`}
-                        className="flex h-9 w-10 shrink-0 items-center justify-center rounded-md bg-accent text-accent-foreground transition-colors hover:bg-accent-hover"
+                        className="flex h-9 w-10 shrink-0 items-center justify-center rounded-md bg-accent text-accent-foreground transition-colors hover:bg-accent-hover cursor-pointer"
                     >
                         <ShoppingCart
                             className="h-4 w-4"

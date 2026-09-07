@@ -26,7 +26,7 @@ export function ThemeToggle() {
             type="button"
             aria-label={isDark ? "Byt till ljust tema" : "Byt till mörkt tema"}
             onClick={() => setTheme(isDark ? "light" : "dark")}
-            className="text-foreground hover:text-muted-foreground"
+            className="text-foreground hover:text-muted-foreground cursor-pointer"
         >
             {isDark ? (
                 <Sun className="h-5 w-5" strokeWidth={1.6} />
