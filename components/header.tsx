@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
     ChevronDown,
     Menu,
@@ -11,12 +12,12 @@ export function Header() {
     return (
         <header className="border-b border-border bg-surface">
             <div className="mx-auto flex h-16 max-w-7xl items-center px-6">
-                <a
+                <Link
                     href="/"
                     className="shrink-0 text-lg font-bold tracking-tight"
                 >
                     WEBSHOP
-                </a>
+                </Link>
 
                 {/* Desktop navigation */}
                 <nav className="ml-8 hidden items-center gap-7 text-sm md:flex">
