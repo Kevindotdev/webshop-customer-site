@@ -3,6 +3,7 @@ import { Header } from "@/components/header";
 import { Hero } from "@/components/hero";
 import { CategoryList } from "@/components/category-list";
 import { ProductGrid } from "@/components/products-grid";
+import { ServiceBenefits } from "@/components/service-benefits";
 
 export default async function Home() {
   const { products } = await ProductService.getProducts();
@@ -25,6 +26,8 @@ export default async function Home() {
             <ProductGrid products={products} />
           </div>
         </section>
+
+        <ServiceBenefits />
       </main>
     </>
   );
