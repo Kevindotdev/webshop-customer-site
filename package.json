@@ -7,7 +7,7 @@
     "mock-server": "json-server --watch server/products.json --middlewares server/middleware.js --port 4000",
     "dev:full": "concurrently \"npm run dev\" \"npm run mock-server\"",
     "build": "next build",
-    "start": "next start",
+    "start": "next start --port 3001",
     "lint": "eslint"
   },
   "dependencies": {
