@@ -29,9 +29,9 @@ export function ThemeToggle() {
             className="text-foreground hover:text-muted-foreground cursor-pointer"
         >
             {isDark ? (
-                <Sun className="h-5 w-5" strokeWidth={1.6} />
+                <Sun className="h-5 w-5" strokeWidth={1.6} fill="currentColor" />
             ) : (
-                <Moon className="h-5 w-5" strokeWidth={1.6} />
+                <Moon className="h-5 w-5" strokeWidth={1.6} fill="currentColor" />
             )}
         </button>
     );
