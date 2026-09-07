@@ -1,4 +1,5 @@
 import { storeCategories } from "@/lib/store-categories";
+import Link from "next/link";
 
 export function CategoryList() {
     return (
@@ -10,9 +11,9 @@ export function CategoryList() {
             <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
                 {/* Show only the first five categories on the homepage. */}
                 {storeCategories.slice(0, 5).map(({ name, icon: Icon }) => (
-                    <a
+                    <Link
                         key={name}
-                        href="#"
+                        href={`/products?category=${encodeURIComponent(name)}`}
                         className="group flex flex-col items-center justify-center rounded-lg border border-border bg-surface py-7 transition-colors hover:border-foreground"
                     >
                         <Icon
@@ -23,7 +24,7 @@ export function CategoryList() {
                         <span className="mt-3 max-w-28 text-center text-sm font-medium leading-5">
                             {name}
                         </span>
-                    </a>
+                    </Link>
                 ))}
             </div>
         </section>

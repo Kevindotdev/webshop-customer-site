@@ -14,11 +14,14 @@ interface CategoryFilterProps {
 export function CategoryFilter({
     categories,
 }: CategoryFilterProps) {
-    const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
     const searchParams = useSearchParams();
 
     const selectedCategory = searchParams.get("category");
     const selectedSubcategory = searchParams.get("subcategory");
+
+    const [expandedCategories, setExpandedCategories] = useState<string[]>(
+        selectedCategory ? [selectedCategory] : [],
+    );
 
     const toggleCategory = (name: string) => {
         setExpandedCategories((currentCategories) =>
