@@ -1,30 +1,39 @@
 import { CategoryFilter } from "@/components/category-filter";
 import { ProductGrid } from "@/components/products-grid";
 import { storeCategories } from "@/lib/store-categories";
+import CategoryService from "@/services/category-service";
 import ProductService from "@/services/product-service";
 
 interface ProductsPageProps {
     searchParams: Promise<{
         category?: string;
+        subcategory?: string;
     }>;
 }
 
 export default async function ProductsPage({
     searchParams,
 }: ProductsPageProps) {
-    const { category } = await searchParams;
+    const { category, subcategory } = await searchParams;
 
     const { products, total } = await ProductService.getAllProducts();
+    const categories = await CategoryService.getAllCategories();
 
     const selectedCategory = storeCategories.find(
         (storeCategory) => storeCategory.name === category,
     );
 
-    const filteredProducts = selectedCategory
-        ? products.filter((product) =>
-            selectedCategory.slugs.includes(product.category?.slug ?? ""),
+    const filteredProducts = subcategory
+        ? products.filter(
+            (product) => product.category?.slug === subcategory,
         )
-        : products;
+        : selectedCategory
+            ? products.filter((product) =>
+                selectedCategory.slugs.includes(
+                    product.category?.slug ?? "",
+                ),
+            )
+            : products;
 
     return (
         <main className="mx-auto w-full max-w-7xl flex-1 px-6 py-8">
@@ -43,7 +52,7 @@ export default async function ProductsPage({
             </div>
 
             <div className="mt-8 grid gap-8 lg:grid-cols-[220px_1fr]">
-                <CategoryFilter />
+                <CategoryFilter categories={categories} />
 
                 <section>
                     <ProductGrid products={filteredProducts} />
