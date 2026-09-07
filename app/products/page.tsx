@@ -1,4 +1,4 @@
-import { CategoryFilter } from "@/components/category-filter";
+import { CategorySidebar } from "@/components/category-sidebar";
 import { ProductGrid } from "@/components/products-grid";
 import { storeCategories } from "@/lib/store-categories";
 import CategoryService from "@/services/category-service";
@@ -36,30 +36,30 @@ export default async function ProductsPage({
             : products;
 
     return (
-        <main className="mx-auto w-full max-w-7xl flex-1 px-6 py-8">
-            <div>
-                <h1 className="text-2xl font-bold">
-                    {selectedCategory
-                        ? selectedCategory.name
-                        : "Alla produkter"}
-                </h1>
+        <div className="relative mx-auto w-full max-w-7xl">
+            <CategorySidebar categories={categories} />
 
-                <p className="mt-1 text-sm text-muted-foreground">
-                    {selectedCategory
-                        ? `${filteredProducts.length} produkter`
-                        : `${total} produkter`}
-                </p>
-            </div>
+            <main className="flex-1 px-6 py-8">
+                <div>
+                    <h1 className="text-2xl font-bold">
+                        {selectedCategory
+                            ? selectedCategory.name
+                            : "Alla produkter"}
+                    </h1>
 
-            <div className="relative mt-8">
-                <aside className="lg:absolute lg:right-full lg:mr-8 lg:w-[220px]">
-                    <CategoryFilter categories={categories} />
-                </aside>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                        {selectedCategory
+                            ? `${filteredProducts.length} produkter`
+                            : `${total} produkter`}
+                    </p>
+                </div>
 
-                <section className="mx-auto">
-                    <ProductGrid products={filteredProducts} />
-                </section>
-            </div>
-        </main>
+                <div className="mt-8">
+                    <section className="mx-auto">
+                        <ProductGrid products={filteredProducts} />
+                    </section>
+                </div>
+            </main>
+        </div>
     );
 }

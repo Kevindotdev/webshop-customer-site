@@ -1,14 +1,23 @@
+"use client";
+
 import Link from "next/link";
 import {
     ChevronDown,
+    ChevronRight,
     Menu,
     Search,
     ShoppingCart,
     User,
 } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
+import { useCategorySidebar } from "./category-sidebar-provider";
 
 export function Header() {
+    const {
+        isCategorySidebarOpen,
+        setIsCategorySidebarOpen,
+    } = useCategorySidebar();
+
     return (
         <header className="border-b border-border bg-surface">
             <div className="mx-auto flex h-16 max-w-7xl items-center px-6">
@@ -21,13 +30,21 @@ export function Header() {
 
                 {/* Desktop navigation */}
                 <nav className="ml-8 hidden items-center gap-7 text-sm md:flex">
-                    <a
-                        href="#"
+                    <button
+                        type="button"
+                        onClick={() =>
+                            setIsCategorySidebarOpen(!isCategorySidebarOpen)
+                        }
                         className="flex items-center gap-1 hover:text-muted-foreground"
                     >
                         Kategorier
-                        <ChevronDown className="h-3 w-3" />
-                    </a>
+
+                        {isCategorySidebarOpen ? (
+                            <ChevronDown className="h-3 w-3" />
+                        ) : (
+                            <ChevronRight className="h-3 w-3" />
+                        )}
+                    </button>
 
                     <a
                         href="#"

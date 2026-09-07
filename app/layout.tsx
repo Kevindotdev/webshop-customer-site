@@ -4,6 +4,7 @@ import "./globals.css";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { ThemeProvider } from "@/components/theme-provider";
+import { CategorySidebarProvider } from "@/components/category-sidebar-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,14 +34,16 @@ export default function RootLayout({
     >
       <body className="min-h-full">
         <ThemeProvider>
-          <Header />
-          <div className="flex min-h-screen flex-col">
-            <div className="flex-1">
-              {children}
-            </div>
+          <CategorySidebarProvider>
+            <Header />
+            <div className="flex min-h-screen flex-col">
+              <div className="flex-1">
+                {children}
+              </div>
 
-            <Footer />
-          </div>
+              <Footer />
+            </div>
+          </CategorySidebarProvider>
         </ThemeProvider>
       </body>
     </html>
