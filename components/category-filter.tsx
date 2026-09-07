@@ -73,6 +73,7 @@ export function CategoryFilter({
 
                                     <Link
                                         href={`/products?category=${encodeURIComponent(name)}`}
+                                        scroll={false}
                                         onClick={() => {
                                             const isSelectedCategory =
                                                 selectedCategory === name && !selectedSubcategory;
@@ -107,6 +108,7 @@ export function CategoryFilter({
                                                 <Link
                                                     key={slug}
                                                     href={`/products?category=${encodeURIComponent(name)}&subcategory=${encodeURIComponent(slug)}`}
+                                                    scroll={false}
                                                     className={`block rounded-md px-2 py-1.5 text-sm transition-colors ${isSelectedSubcategory
                                                         ? "bg-accent font-medium text-accent-foreground"
                                                         : "text-muted-foreground hover:bg-muted hover:text-foreground"
