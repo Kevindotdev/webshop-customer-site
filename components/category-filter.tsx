@@ -48,6 +48,9 @@ export function CategoryFilter({
                     {storeCategories.map(({ name, slugs }) => {
                         const isExpanded = expandedCategories.includes(name);
 
+                        const isSelectedCategory =
+                            selectedCategory === name && !selectedSubcategory;
+
                         return (
                             <div key={name}>
                                 <div className="flex items-center">
@@ -80,7 +83,10 @@ export function CategoryFilter({
                                                 toggleCategory(name);
                                             }
                                         }}
-                                        className="flex-1 rounded-md px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                                        className={`flex-1 rounded-md px-2 py-1.5 text-sm transition-colors ${isSelectedCategory
+                                            ? "bg-accent font-medium text-accent-foreground"
+                                            : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                                            }`}
                                     >
                                         {name}
                                     </Link>
@@ -93,11 +99,18 @@ export function CategoryFilter({
                                                 (category) => category.slug === slug,
                                             );
 
+                                            const isSelectedSubcategory =
+                                                selectedCategory === name &&
+                                                selectedSubcategory === slug;
+
                                             return (
                                                 <Link
                                                     key={slug}
                                                     href={`/products?category=${encodeURIComponent(name)}&subcategory=${encodeURIComponent(slug)}`}
-                                                    className="block rounded-md px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                                                    className={`block rounded-md px-2 py-1.5 text-sm transition-colors ${isSelectedSubcategory
+                                                        ? "bg-accent font-medium text-accent-foreground"
+                                                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                                                        }`}
                                                 >
                                                     {category?.name ?? slug}
                                                 </Link>
