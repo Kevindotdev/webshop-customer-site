@@ -51,7 +51,7 @@ export const storeCategories = [
     ],
   },
   {
-    name: "Hem",
+    name: "Hem & Inredning",
     icon: House,
     slugs: [
       "furniture",
