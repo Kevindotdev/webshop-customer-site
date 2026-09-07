@@ -51,10 +51,12 @@ export default async function ProductsPage({
                 </p>
             </div>
 
-            <div className="mt-8 grid gap-8 lg:grid-cols-[220px_1fr]">
-                <CategoryFilter categories={categories} />
+            <div className="relative mt-8">
+                <aside className="lg:absolute lg:right-full lg:mr-8 lg:w-[220px]">
+                    <CategoryFilter categories={categories} />
+                </aside>
 
-                <section>
+                <section className="mx-auto">
                     <ProductGrid products={filteredProducts} />
                 </section>
             </div>
