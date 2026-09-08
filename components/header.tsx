@@ -194,7 +194,7 @@ export function Header({
                         className="absolute inset-0 bg-black/40"
                     />
 
-                    <nav className="absolute right-0 top-0 h-full w-80 max-w-[85vw] bg-surface px-6 py-6 shadow-lg">
+                    <nav className="absolute right-0 top-0 h-full w-80 max-w-[85vw] bg-surface px-6 py-6 shadow-lg overflow-y-auto">
                         <div className="flex flex-col text-sm">
                             <div className="border-b border-border">
                                 <button
