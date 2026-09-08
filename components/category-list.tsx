@@ -1,7 +1,12 @@
+"use client";
+
 import { storeCategories } from "@/lib/store-categories";
 import Link from "next/link";
+import { useCategorySidebar } from "./category-sidebar-provider";
 
 export function CategoryList() {
+    const { setIsCategorySidebarOpen } = useCategorySidebar();
+
     return (
         <section className="mt-10">
             <h2 className="text-lg font-semibold">
@@ -14,6 +19,7 @@ export function CategoryList() {
                     <Link
                         key={name}
                         href={`/products?category=${encodeURIComponent(name)}`}
+                        onClick={() => setIsCategorySidebarOpen(true)}
                         className="group flex flex-col items-center justify-center rounded-lg border border-border bg-surface py-7 transition-colors hover:border-foreground"
                     >
                         <Icon
