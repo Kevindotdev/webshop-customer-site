@@ -2,6 +2,7 @@ import { Check, Heart, ShoppingCart, X } from "lucide-react";
 import type { Product } from "@/app/types";
 import { formatPrice } from "@/lib/utils";
 import { RatingStars } from "./rating-stars";
+import Image from "next/image";
 
 interface ProductCardProps {
     product: Product;
@@ -24,13 +25,13 @@ export function ProductCard({ product }: ProductCardProps) {
                 className="flex flex-1 flex-col"
             >
                 <div className="relative aspect-[4/3] bg-muted">
-                    <div className="flex h-full w-full items-center justify-center p-5">
-                        <img
-                            src={product.thumbnail}
-                            alt={product.title}
-                            className="h-full w-full object-contain transition-transform duration-200 group-hover:scale-105"
-                        />
-                    </div>
+                    <Image
+                        src={product.thumbnail}
+                        alt={product.title}
+                        fill
+                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                        className="object-contain p-5 transition-transform duration-200 group-hover:scale-105"
+                    />
 
                     {product.discountPercentage &&
                         product.discountPercentage > 0 ? (
