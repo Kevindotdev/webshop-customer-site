@@ -1,4 +1,4 @@
-import type { ProductsResponse } from "@/app/types";
+import type { Product, ProductsResponse } from "@/app/types";
 
 const API_URL = "http://localhost:4000";
 
@@ -28,6 +28,24 @@ export default class ProductService {
 
         if (!response.ok) {
             throw new Error("Failed to fetch products");
+        }
+
+        return response.json();
+    }
+
+    static async getProductById(
+        productId: number,
+    ): Promise<Product | null> {
+        const response = await fetch(
+            `${API_URL}/products/${productId}?_expand=category`,
+        );
+
+        if (response.status === 404) {
+            return null;
+        }
+
+        if (!response.ok) {
+            throw new Error("Failed to fetch product");
         }
 
         return response.json();
