@@ -21,7 +21,7 @@ export function Breadcrumbs({
     return (
         <nav
             aria-label="Brödsmulor"
-            className="mb-6 flex items-center gap-1.5 overflow-hidden text-sm text-muted-foreground"
+            className="mb-6 flex items-center gap-1.5 overflow-x-auto whitespace-nowrap text-sm text-muted-foreground"
         >
             <Link
                 href="/"
