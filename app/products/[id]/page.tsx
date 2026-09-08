@@ -5,6 +5,8 @@ import { ProductInfo } from "@/components/product-info";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { ProductPurchase } from "@/components/product-purchase";
 import { ProductDescription } from "@/components/product-description";
+import { ProductSpecifications } from "@/components/product-specifications";
+import { ProductReviews } from "@/components/product-reviews";
 
 interface ProductPageProps {
     params: Promise<{
@@ -62,6 +64,14 @@ export default async function ProductPage({
                         <ProductPurchase product={product} />
                     </div>
                 </div>
+
+                <section className="mx-auto mt-22 max-w-2xl">
+                    <ProductSpecifications product={product} />
+                </section>
+
+                <section className="mx-auto mt-22 max-w-2xl">
+                    <ProductReviews reviews={product.reviews} />
+                </section>
             </main>
         </>
     );

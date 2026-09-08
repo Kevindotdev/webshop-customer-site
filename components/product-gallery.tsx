@@ -16,7 +16,7 @@ export function ProductGallery({
 
     return (
         <div>
-            <div className="relative aspect-square rounded-lg bg-muted">
+            <div className="relative aspect-square rounded-lg">
                 <Image
                     src={selectedImage}
                     alt={title}

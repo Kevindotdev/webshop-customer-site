@@ -51,15 +51,16 @@ export function ProductInfo({
                 {product.title}
             </h1>
 
-            {product.rating ? (
-                <div className="mt-3 flex items-center gap-2">
-                    <RatingStars rating={product.rating} />
+            <a
+                href="#reviews"
+                className="mt-3 flex w-fit items-center gap-2 transition-opacity hover:opacity-70"
+            >
+                <RatingStars rating={reviewCount > 0 ? product.rating ?? 0 : 0} />
 
-                    <span className="text-sm text-muted-foreground">
-                        ({reviewCount})
-                    </span>
-                </div>
-            ) : null}
+                <span className="text-sm text-muted-foreground">
+                    ({reviewCount})
+                </span>
+            </a>
         </section>
     );
 }
