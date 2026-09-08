@@ -15,6 +15,7 @@ import { useCategorySidebar } from "./category-sidebar-provider";
 import { useState } from "react";
 import { storeCategories } from "@/lib/store-categories";
 import { Category } from "@/app/types";
+import { useSearchParams } from "next/navigation";
 
 interface HeaderProps {
     categories: Category[];
@@ -33,6 +34,11 @@ export function Header({
         useState(false);
     const [expandedMobileCategory, setExpandedMobileCategory] =
         useState<string | null>(null);
+
+    const searchParams = useSearchParams();
+
+    const selectedCategory = searchParams.get("category");
+    const selectedSubcategory = searchParams.get("subcategory");
 
     return (
         <header className="sticky top-0 z-50 border-b border-border bg-surface md:static">
@@ -194,6 +200,9 @@ export function Header({
                                             const isLastCategory =
                                                 index === storeCategories.length - 1;
 
+                                            const isSelectedCategory =
+                                                selectedCategory === name && !selectedSubcategory;
+
                                             return (
                                                 <div
                                                     key={name}
@@ -203,30 +212,44 @@ export function Header({
                                                             : "border-b border-border"
                                                     }
                                                 >
-                                                    <button
-                                                        type="button"
-                                                        onClick={() =>
-                                                            setExpandedMobileCategory(
-                                                                isExpanded ? null : name,
-                                                            )
-                                                        }
-                                                        className="flex w-full items-center justify-between py-4 text-left"
-                                                    >
-                                                        <span className="flex items-center gap-3">
+                                                    <div className="flex items-center py-4">
+                                                        <Link
+                                                            href={`/products?category=${encodeURIComponent(name)}`}
+                                                            onClick={() => setIsMobileMenuOpen(false)}
+                                                            className={`flex flex-1 items-center gap-3 rounded-md px-2 py-2 ${isSelectedCategory
+                                                                ? "bg-muted font-medium text-foreground"
+                                                                : "hover:text-muted-foreground"
+                                                                }`}
+                                                        >
                                                             <Icon
                                                                 className="h-5 w-5 text-muted-foreground"
                                                                 strokeWidth={1.5}
                                                             />
 
                                                             {name}
-                                                        </span>
+                                                        </Link>
 
-                                                        {isExpanded ? (
-                                                            <ChevronDown className="h-4 w-4" />
-                                                        ) : (
-                                                            <ChevronRight className="h-4 w-4" />
-                                                        )}
-                                                    </button>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() =>
+                                                                setExpandedMobileCategory(
+                                                                    isExpanded ? null : name,
+                                                                )
+                                                            }
+                                                            aria-label={
+                                                                isExpanded
+                                                                    ? `Dölj ${name}`
+                                                                    : `Visa ${name}`
+                                                            }
+                                                            className="flex h-8 w-8 items-center justify-center"
+                                                        >
+                                                            {isExpanded ? (
+                                                                <ChevronDown className="h-4 w-4" />
+                                                            ) : (
+                                                                <ChevronRight className="h-4 w-4" />
+                                                            )}
+                                                        </button>
+                                                    </div>
 
                                                     {isExpanded ? (
                                                         <div className="pb-3">
@@ -236,13 +259,22 @@ export function Header({
                                                                         category.slug === slug,
                                                                 );
 
+                                                                const isSelectedSubcategory =
+                                                                    selectedCategory === name &&
+                                                                    selectedSubcategory === slug;
+
                                                                 return (
-                                                                    <div
+                                                                    <Link
                                                                         key={slug}
-                                                                        className="py-2 pl-4 text-muted-foreground"
+                                                                        href={`/products?category=${encodeURIComponent(name)}&subcategory=${encodeURIComponent(slug)}`}
+                                                                        onClick={() => setIsMobileMenuOpen(false)}
+                                                                        className={`block rounded-md py-2 pl-8 transition-colors ${isSelectedSubcategory
+                                                                            ? "bg-muted font-medium text-foreground"
+                                                                            : "text-muted-foreground hover:text-foreground"
+                                                                            }`}
                                                                     >
                                                                         {category?.name ?? slug}
-                                                                    </div>
+                                                                    </Link>
                                                                 );
                                                             })}
                                                         </div>
