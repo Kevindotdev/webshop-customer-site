@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 import { useCategorySidebar } from "./category-sidebar-provider";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { storeCategories } from "@/lib/store-categories";
 import { Category } from "@/app/types";
 import { useSearchParams } from "next/navigation";
@@ -40,11 +40,24 @@ export function Header({
     const selectedCategory = searchParams.get("category");
     const selectedSubcategory = searchParams.get("subcategory");
 
+    useEffect(() => {
+        if (!isMobileMenuOpen) {
+            return;
+        }
+
+        document.body.style.overflow = "hidden";
+
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [isMobileMenuOpen]);
+
     return (
         <header className="sticky top-0 z-50 border-b border-border bg-surface md:static">
             <div className="mx-auto flex h-16 max-w-7xl items-center px-6">
                 <Link
                     href="/"
+                    onClick={() => setIsMobileMenuOpen(false)}
                     className="shrink-0 text-lg font-bold tracking-tight"
                 >
                     WEBSHOP
