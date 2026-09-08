@@ -150,7 +150,16 @@ export function Header({
 
                     <button
                         type="button"
-                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                        onClick={() => {
+                            const isOpeningMenu = !isMobileMenuOpen;
+
+                            setIsMobileMenuOpen(isOpeningMenu);
+
+                            if (isOpeningMenu && selectedCategory) {
+                                setIsMobileCategoriesOpen(true);
+                                setExpandedMobileCategory(selectedCategory);
+                            }
+                        }}
                         aria-label="Meny"
                         className="text-foreground hover:text-muted-foreground"
                     >
@@ -215,7 +224,11 @@ export function Header({
                                                     <div className="flex items-center py-4">
                                                         <Link
                                                             href={`/products?category=${encodeURIComponent(name)}`}
-                                                            onClick={() => setIsMobileMenuOpen(false)}
+                                                            onClick={() => {
+                                                                setExpandedMobileCategory(name);
+                                                                setIsMobileCategoriesOpen(true);
+                                                                setIsMobileMenuOpen(false);
+                                                            }}
                                                             className={`flex flex-1 items-center gap-3 rounded-md px-2 py-2 ${isSelectedCategory
                                                                 ? "bg-muted font-medium text-foreground"
                                                                 : "hover:text-muted-foreground"
@@ -267,7 +280,11 @@ export function Header({
                                                                     <Link
                                                                         key={slug}
                                                                         href={`/products?category=${encodeURIComponent(name)}&subcategory=${encodeURIComponent(slug)}`}
-                                                                        onClick={() => setIsMobileMenuOpen(false)}
+                                                                        onClick={() => {
+                                                                            setExpandedMobileCategory(name);
+                                                                            setIsMobileCategoriesOpen(true);
+                                                                            setIsMobileMenuOpen(false);
+                                                                        }}
                                                                         className={`block rounded-md py-2 pl-8 transition-colors ${isSelectedSubcategory
                                                                             ? "bg-muted font-medium text-foreground"
                                                                             : "text-muted-foreground hover:text-foreground"
