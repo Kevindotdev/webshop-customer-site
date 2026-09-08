@@ -3,6 +3,8 @@ import ProductService from "@/services/product-service";
 import { ProductGallery } from "@/components/product-gallery";
 import { ProductInfo } from "@/components/product-info";
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import { ProductPurchase } from "@/components/product-purchase";
+import { ProductDescription } from "@/components/product-description";
 
 interface ProductPageProps {
     params: Promise<{
@@ -36,15 +38,29 @@ export default async function ProductPage({
                     productTitle={product.title}
                 />
 
-                <div className="grid gap-10 lg:grid-cols-2">
-                    <section>
+                <div className="grid gap-8 xl:grid-cols-[260px_minmax(0,1fr)_280px]">
+                    <div className="contents xl:block xl:min-w-0">
+                        <div className="order-1">
+                            <ProductInfo product={product} />
+                        </div>
+
+                        <div className="order-3 mt-8 xl:mt-8">
+                            <ProductDescription
+                                description={product.description}
+                            />
+                        </div>
+                    </div>
+
+                    <section className="order-2 min-w-0 xl:order-0">
                         <ProductGallery
                             images={product.images}
                             title={product.title}
                         />
                     </section>
 
-                    <ProductInfo product={product} />
+                    <div className="order-4 min-w-0 xl:order-0">
+                        <ProductPurchase product={product} />
+                    </div>
                 </div>
             </main>
         </>
