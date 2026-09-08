@@ -8,18 +8,34 @@ import {
     Search,
     ShoppingCart,
     User,
+    X,
 } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 import { useCategorySidebar } from "./category-sidebar-provider";
+import { useState } from "react";
+import { storeCategories } from "@/lib/store-categories";
+import { Category } from "@/app/types";
 
-export function Header() {
+interface HeaderProps {
+    categories: Category[];
+}
+
+export function Header({
+    categories,
+}: HeaderProps) {
     const {
         isCategorySidebarOpen,
         setIsCategorySidebarOpen,
     } = useCategorySidebar();
 
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isMobileCategoriesOpen, setIsMobileCategoriesOpen] =
+        useState(false);
+    const [expandedMobileCategory, setExpandedMobileCategory] =
+        useState<string | null>(null);
+
     return (
-        <header className="border-b border-border bg-surface">
+        <header className="sticky top-0 z-50 border-b border-border bg-surface md:static">
             <div className="mx-auto flex h-16 max-w-7xl items-center px-6">
                 <Link
                     href="/"
@@ -128,13 +144,134 @@ export function Header() {
 
                     <button
                         type="button"
+                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                         aria-label="Meny"
                         className="text-foreground hover:text-muted-foreground"
                     >
-                        <Menu className="h-5 w-5" strokeWidth={1.6} />
+                        {isMobileMenuOpen ? (
+                            <X className="h-5 w-5" strokeWidth={1.6} />
+                        ) : (
+                            <Menu className="h-5 w-5" strokeWidth={1.6} />
+                        )}
                     </button>
                 </div>
             </div>
+
+            {isMobileMenuOpen ? (
+                <div className="fixed inset-x-0 bottom-0 top-16 z-40 md:hidden">
+                    <button
+                        type="button"
+                        aria-label="Stäng meny"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="absolute inset-0 bg-black/40"
+                    />
+
+                    <nav className="absolute right-0 top-0 h-full w-80 max-w-[85vw] bg-surface px-6 py-6 shadow-lg">
+                        <div className="flex flex-col text-sm">
+                            <div className="border-b border-border">
+                                <button
+                                    type="button"
+                                    onClick={() =>
+                                        setIsMobileCategoriesOpen(!isMobileCategoriesOpen)
+                                    }
+                                    className="flex w-full items-center justify-between py-4"
+                                >
+                                    Kategorier
+
+                                    {isMobileCategoriesOpen ? (
+                                        <ChevronDown className="h-4 w-4" />
+                                    ) : (
+                                        <ChevronRight className="h-4 w-4" />
+                                    )}
+                                </button>
+
+                                {isMobileCategoriesOpen ? (
+                                    < div className="border-t border-border">
+                                        {storeCategories.map(({ name, slugs, icon: Icon }, index) => {
+                                            const isExpanded =
+                                                expandedMobileCategory === name;
+
+                                            const isLastCategory =
+                                                index === storeCategories.length - 1;
+
+                                            return (
+                                                <div
+                                                    key={name}
+                                                    className={
+                                                        isLastCategory
+                                                            ? ""
+                                                            : "border-b border-border"
+                                                    }
+                                                >
+                                                    <button
+                                                        type="button"
+                                                        onClick={() =>
+                                                            setExpandedMobileCategory(
+                                                                isExpanded ? null : name,
+                                                            )
+                                                        }
+                                                        className="flex w-full items-center justify-between py-4 text-left"
+                                                    >
+                                                        <span className="flex items-center gap-3">
+                                                            <Icon
+                                                                className="h-5 w-5 text-muted-foreground"
+                                                                strokeWidth={1.5}
+                                                            />
+
+                                                            {name}
+                                                        </span>
+
+                                                        {isExpanded ? (
+                                                            <ChevronDown className="h-4 w-4" />
+                                                        ) : (
+                                                            <ChevronRight className="h-4 w-4" />
+                                                        )}
+                                                    </button>
+
+                                                    {isExpanded ? (
+                                                        <div className="pb-3">
+                                                            {slugs.map((slug) => {
+                                                                const category = categories.find(
+                                                                    (category) =>
+                                                                        category.slug === slug,
+                                                                );
+
+                                                                return (
+                                                                    <div
+                                                                        key={slug}
+                                                                        className="py-2 pl-4 text-muted-foreground"
+                                                                    >
+                                                                        {category?.name ?? slug}
+                                                                    </div>
+                                                                );
+                                                            })}
+                                                        </div>
+                                                    ) : null}
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                ) : null}
+                            </div>
+
+                            <a
+                                href="#"
+                                className="py-4 hover:text-muted-foreground"
+                            >
+                                Nyheter
+                            </a>
+
+                            <a
+                                href="#"
+                                className="py-4 hover:text-muted-foreground"
+                            >
+                                Erbjudanden
+                            </a>
+                        </div>
+                    </nav>
+                </div>
+            ) : null}
+
         </header>
     );
 }

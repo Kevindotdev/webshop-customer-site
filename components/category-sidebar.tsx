@@ -18,7 +18,7 @@ export function CategorySidebar({
     }
 
     return (
-        <aside className="absolute right-full top-6 mr-8 w-[220px]">
+        <aside className="absolute right-full top-6 mr-8 w-55">
             <CategoryFilter categories={categories} />
         </aside>
     );
