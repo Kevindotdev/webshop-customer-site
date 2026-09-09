@@ -27,6 +27,7 @@ export function Header({
     const {
         isCategorySidebarOpen,
         setIsCategorySidebarOpen,
+        activeCategorySlug,
     } = useCategorySidebar();
 
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -38,7 +39,16 @@ export function Header({
     const searchParams = useSearchParams();
 
     const selectedCategory = searchParams.get("category");
-    const selectedSubcategory = searchParams.get("subcategory");
+
+    const selectedSubcategory =
+        searchParams.get("subcategory") ??
+        activeCategorySlug;
+
+    const activeStoreCategory = selectedSubcategory
+        ? storeCategories.find((storeCategory) =>
+            storeCategory.slugs.includes(selectedSubcategory),
+        )
+        : undefined;
 
     useEffect(() => {
         if (!isMobileMenuOpen) {
@@ -168,9 +178,16 @@ export function Header({
 
                             setIsMobileMenuOpen(isOpeningMenu);
 
-                            if (isOpeningMenu && selectedCategory) {
-                                setIsMobileCategoriesOpen(true);
-                                setExpandedMobileCategory(selectedCategory);
+                            if (isOpeningMenu) {
+                                if (selectedCategory) {
+                                    setIsMobileCategoriesOpen(true);
+                                    setExpandedMobileCategory(selectedCategory);
+                                } else if (activeStoreCategory) {
+                                    setIsMobileCategoriesOpen(true);
+                                    setExpandedMobileCategory(
+                                        activeStoreCategory.name,
+                                    );
+                                }
                             }
                         }}
                         aria-label="Meny"
@@ -286,7 +303,6 @@ export function Header({
                                                                 );
 
                                                                 const isSelectedSubcategory =
-                                                                    selectedCategory === name &&
                                                                     selectedSubcategory === slug;
 
                                                                 return (

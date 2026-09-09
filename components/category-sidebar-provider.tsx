@@ -3,32 +3,74 @@
 import {
     createContext,
     useContext,
+    useEffect,
+    useRef,
     useState,
     type ReactNode,
 } from "react";
+import { usePathname } from "next/navigation";
 
 interface CategorySidebarContextValue {
     isCategorySidebarOpen: boolean;
     setIsCategorySidebarOpen: (isOpen: boolean) => void;
+    activeCategorySlug: string | undefined;
+    setActiveCategorySlug: (
+        slug: string | undefined,
+    ) => void;
 }
 
 const CategorySidebarContext = createContext<
     CategorySidebarContextValue | undefined
 >(undefined);
 
+function isProductsPath(pathname: string) {
+    return (
+        pathname === "/products" ||
+        pathname.startsWith("/products/")
+    );
+}
+
 export function CategorySidebarProvider({
     children,
 }: {
     children: ReactNode;
 }) {
+    const pathname = usePathname();
+
     const [isCategorySidebarOpen, setIsCategorySidebarOpen] =
-        useState(false);
+        useState(() => isProductsPath(pathname));
+
+    const [activeCategorySlug, setActiveCategorySlug] =
+        useState<string | undefined>();
+
+    const previousPathname = useRef(pathname);
+
+    useEffect(() => {
+        const wasOnProductsPath = isProductsPath(
+            previousPathname.current,
+        );
+
+        const isOnProductsPath = isProductsPath(pathname);
+
+        const enteredProductsPath =
+            !wasOnProductsPath && isOnProductsPath;
+
+        if (enteredProductsPath) {
+            queueMicrotask(() => {
+                setIsCategorySidebarOpen(true);
+            });
+        }
+
+        previousPathname.current = pathname;
+    }, [pathname]);
 
     return (
         <CategorySidebarContext.Provider
             value={{
                 isCategorySidebarOpen,
                 setIsCategorySidebarOpen,
+                activeCategorySlug,
+                setActiveCategorySlug,
             }}
         >
             {children}
