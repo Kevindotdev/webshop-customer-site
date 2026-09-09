@@ -9,8 +9,8 @@ export function Footer() {
     return (
         <footer className="mt-auto border-t border-border bg-footer">
             <div className="mx-auto max-w-7xl px-6 py-12">
-                <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-                    <div>
+                <div className="grid gap-10 text-center sm:grid-cols-2 lg:grid-cols-4">
+                    <div className="flex flex-col items-center">
                         <h2 className="text-lg font-bold">
                             WEBSHOP
                         </h2>
@@ -114,7 +114,7 @@ export function Footer() {
                             Handla tryggt
                         </h3>
 
-                        <div className="mt-4 space-y-3">
+                        <div className="mt-4 flex flex-col items-center space-y-3">
                             <div className="flex items-center gap-3">
                                 <Truck className="h-4 w-4 text-muted-foreground" />
 
@@ -142,7 +142,7 @@ export function Footer() {
                     </div>
                 </div>
 
-                <div className="mt-10 flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
+                <div className="mt-10 flex flex-col items-center gap-4 border-t border-border pt-6 text-center sm:flex-row sm:justify-between sm:text-left">
                     <p className="text-xs text-muted-foreground">
                         © {new Date().getFullYear()} Webshop. Alla rättigheter
                         förbehållna.

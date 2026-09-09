@@ -24,7 +24,7 @@ export function ProductCard({ product }: ProductCardProps) {
                 href={`/products/${product.id}`}
                 className="flex flex-1 flex-col"
             >
-                <div className="relative aspect-[4/3] bg-muted">
+                <div className="relative aspect-4/3">
                     <Image
                         src={product.thumbnail}
                         alt={product.title}
