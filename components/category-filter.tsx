@@ -9,18 +9,30 @@ import { Category } from "@/app/types";
 
 interface CategoryFilterProps {
     categories: Category[];
+    activeCategorySlug?: string;
 }
 
 export function CategoryFilter({
     categories,
+    activeCategorySlug,
 }: CategoryFilterProps) {
     const searchParams = useSearchParams();
 
     const selectedCategory = searchParams.get("category");
-    const selectedSubcategory = searchParams.get("subcategory");
+    const selectedSubcategory =
+        searchParams.get("subcategory") ?? activeCategorySlug;
+    const activeStoreCategory = selectedSubcategory
+        ? storeCategories.find((storeCategory) =>
+            storeCategory.slugs.includes(selectedSubcategory),
+        )
+        : undefined;
 
     const [expandedCategories, setExpandedCategories] = useState<string[]>(
-        selectedCategory ? [selectedCategory] : [],
+        selectedCategory
+            ? [selectedCategory]
+            : activeStoreCategory
+                ? [activeStoreCategory.name]
+                : [],
     );
 
     const toggleCategory = (name: string) => {
@@ -88,7 +100,7 @@ export function CategoryFilter({
                                             }
                                         }}
                                         className={`flex-1 rounded-md px-2 py-1.5 text-sm transition-colors ${isSelectedCategory
-                                            ? "bg-accent font-medium text-accent-foreground"
+                                            ? "bg-muted font-medium text-foreground"
                                             : "text-muted-foreground hover:bg-muted hover:text-foreground"
                                             }`}
                                     >
@@ -104,7 +116,6 @@ export function CategoryFilter({
                                             );
 
                                             const isSelectedSubcategory =
-                                                selectedCategory === name &&
                                                 selectedSubcategory === slug;
 
                                             return (
@@ -113,7 +124,7 @@ export function CategoryFilter({
                                                     href={`/products?category=${encodeURIComponent(name)}&subcategory=${encodeURIComponent(slug)}`}
                                                     scroll={false}
                                                     className={`block rounded-md px-2 py-1.5 text-sm transition-colors ${isSelectedSubcategory
-                                                        ? "bg-accent font-medium text-accent-foreground"
+                                                        ? "bg-muted font-medium text-foreground"
                                                         : "text-muted-foreground hover:bg-muted hover:text-foreground"
                                                         }`}
                                                 >

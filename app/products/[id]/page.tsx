@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation";
 import ProductService from "@/services/product-service";
+import CategoryService from "@/services/category-service";
+import { CategorySidebar } from "@/components/category-sidebar";
 import { ProductGallery } from "@/components/product-gallery";
 import { ProductInfo } from "@/components/product-info";
 import { Breadcrumbs } from "@/components/breadcrumbs";
@@ -32,9 +34,17 @@ export default async function ProductPage({
         notFound();
     }
 
+    const categories =
+        await CategoryService.getAllCategories();
+
     return (
-        <>
-            <main className="mx-auto w-full max-w-7xl px-6 py-8">
+        <div className="relative mx-auto w-full max-w-7xl">
+            <CategorySidebar
+                categories={categories}
+                activeCategorySlug={product.category?.slug}
+            />
+
+            <main className="flex-1 px-6 py-8">
                 <Breadcrumbs
                     category={product.category}
                     productTitle={product.title}
@@ -70,9 +80,11 @@ export default async function ProductPage({
                 </section>
 
                 <section className="mx-auto mt-22 max-w-2xl">
-                    <ProductReviews reviews={product.reviews} />
+                    <ProductReviews
+                        reviews={product.reviews}
+                    />
                 </section>
             </main>
-        </>
+        </div>
     );
 }
