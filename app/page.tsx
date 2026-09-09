@@ -29,7 +29,6 @@ export default async function Home() {
           </div>
         </section>
 
-        <ServiceBenefits />
       </main>
     </div>
   );

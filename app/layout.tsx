@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { CategorySidebarProvider } from "@/components/category-sidebar-provider";
 import CategoryService from "@/services/category-service";
 import { Suspense } from "react";
+import { ServiceBenefits } from "@/components/service-benefits";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -45,6 +46,10 @@ export default async function RootLayout({
             <div className="flex min-h-screen flex-col">
               <div className="flex-1">
                 {children}
+              </div>
+
+              <div className="mx-auto w-full max-w-7xl px-6">
+                <ServiceBenefits />
               </div>
 
               <Footer />
