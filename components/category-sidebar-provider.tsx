@@ -13,6 +13,10 @@ import { usePathname } from "next/navigation";
 interface CategorySidebarContextValue {
     isCategorySidebarOpen: boolean;
     setIsCategorySidebarOpen: (isOpen: boolean) => void;
+    activeCategorySlug: string | undefined;
+    setActiveCategorySlug: (
+        slug: string | undefined,
+    ) => void;
 }
 
 const CategorySidebarContext = createContext<
@@ -35,6 +39,9 @@ export function CategorySidebarProvider({
 
     const [isCategorySidebarOpen, setIsCategorySidebarOpen] =
         useState(() => isProductsPath(pathname));
+
+    const [activeCategorySlug, setActiveCategorySlug] =
+        useState<string | undefined>();
 
     const previousPathname = useRef(pathname);
 
@@ -62,6 +69,8 @@ export function CategorySidebarProvider({
             value={{
                 isCategorySidebarOpen,
                 setIsCategorySidebarOpen,
+                activeCategorySlug,
+                setActiveCategorySlug,
             }}
         >
             {children}

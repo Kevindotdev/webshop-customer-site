@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { storeCategories } from "@/lib/store-categories";
 import { Category } from "@/app/types";
+import { useCategorySidebar } from "./category-sidebar-provider";
 
 interface CategoryFilterProps {
     categories: Category[];
@@ -18,9 +19,17 @@ export function CategoryFilter({
 }: CategoryFilterProps) {
     const searchParams = useSearchParams();
 
+    const {
+        activeCategorySlug: sharedActiveCategorySlug,
+    } = useCategorySidebar();
+
     const selectedCategory = searchParams.get("category");
+
     const selectedSubcategory =
-        searchParams.get("subcategory") ?? activeCategorySlug;
+        searchParams.get("subcategory") ??
+        activeCategorySlug ??
+        sharedActiveCategorySlug;
+
     const activeStoreCategory = selectedSubcategory
         ? storeCategories.find((storeCategory) =>
             storeCategory.slugs.includes(selectedSubcategory),

@@ -9,6 +9,7 @@ import { ProductPurchase } from "@/components/product-purchase";
 import { ProductDescription } from "@/components/product-description";
 import { ProductSpecifications } from "@/components/product-specifications";
 import { ProductReviews } from "@/components/product-reviews";
+import { ProductCategoryProvider } from "@/components/product-category-provider";
 
 interface ProductPageProps {
     params: Promise<{
@@ -39,6 +40,10 @@ export default async function ProductPage({
 
     return (
         <div className="relative mx-auto w-full max-w-7xl">
+            <ProductCategoryProvider
+                activeCategorySlug={product.category?.slug}
+            />
+
             <CategorySidebar
                 categories={categories}
                 activeCategorySlug={product.category?.slug}
