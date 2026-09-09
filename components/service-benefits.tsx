@@ -30,8 +30,8 @@ const benefits = [
 
 export function ServiceBenefits() {
     return (
-        <section className="mt-12 border-y border-border py-8">
-            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <section className="mt-12 mb-12 border-y border-border py-8">
+            <div className="grid justify-items-center gap-8 sm:grid-cols-2 lg:grid-cols-4">
                 {benefits.map(({ icon: Icon, title, description }) => (
                     <div
                         key={title}
