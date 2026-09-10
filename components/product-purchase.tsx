@@ -1,3 +1,5 @@
+"use client";
+
 import {
     Check,
     ShoppingCart,
@@ -5,6 +7,7 @@ import {
 } from "lucide-react";
 import type { Product } from "@/app/types";
 import { formatPrice } from "@/lib/utils";
+import { useCart } from "./cart-provider";
 
 interface ProductPurchaseProps {
     product: Product;
@@ -13,6 +16,8 @@ interface ProductPurchaseProps {
 export function ProductPurchase({
     product,
 }: ProductPurchaseProps) {
+    const { addToCart } = useCart();
+
     const discountPercentage =
         product.discountPercentage ?? 0;
 
@@ -85,6 +90,7 @@ export function ProductPurchase({
 
             <button
                 type="button"
+                onClick={() => addToCart(product)}
                 disabled={!isInStock}
                 className="mt-6 flex h-11 w-full items-center justify-center gap-2 rounded-md bg-purchase text-sm font-medium text-purchase-foreground transition-colors hover:bg-purchase-hover disabled:cursor-not-allowed disabled:opacity-50"
             >

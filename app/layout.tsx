@@ -8,6 +8,7 @@ import { CategorySidebarProvider } from "@/components/category-sidebar-provider"
 import CategoryService from "@/services/category-service";
 import { Suspense } from "react";
 import { ServiceBenefits } from "@/components/service-benefits";
+import { CartProvider } from "@/components/cart-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,22 +40,25 @@ export default async function RootLayout({
     >
       <body className="min-h-full">
         <ThemeProvider>
-          <CategorySidebarProvider>
-            <Suspense>
-              <Header categories={categories} />
-            </Suspense>
-            <div className="flex min-h-screen flex-col">
-              <div className="flex-1">
-                {children}
-              </div>
+          <CartProvider>
+            <CategorySidebarProvider>
+              <Suspense>
+                <Header categories={categories} />
+              </Suspense>
 
-              <div className="mx-auto w-full max-w-7xl px-6">
-                <ServiceBenefits />
-              </div>
+              <div className="flex min-h-screen flex-col">
+                <div className="flex-1">
+                  {children}
+                </div>
 
-              <Footer />
-            </div>
-          </CategorySidebarProvider>
+                <div className="mx-auto w-full max-w-7xl px-6">
+                  <ServiceBenefits />
+                </div>
+
+                <Footer />
+              </div>
+            </CategorySidebarProvider>
+          </CartProvider>
         </ThemeProvider>
       </body>
     </html>
