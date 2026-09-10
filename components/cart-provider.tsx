@@ -3,7 +3,6 @@
 import {
     createContext,
     useContext,
-    useEffect,
     useState,
     type ReactNode,
 } from "react";
@@ -25,6 +24,8 @@ interface CartContextValue {
     clearCart: () => void;
     itemCount: number;
     subtotal: number;
+    isCartOpen: boolean;
+    setIsCartOpen: (isOpen: boolean) => void;
 }
 
 const CartContext = createContext<
@@ -45,6 +46,9 @@ export function CartProvider({
     children: ReactNode;
 }) {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
+
+    const [isCartOpen, setIsCartOpen] =
+        useState(false);
 
     function addToCart(product: Product) {
         const stock = product.stock;
@@ -146,6 +150,8 @@ export function CartProvider({
                 clearCart,
                 itemCount,
                 subtotal,
+                isCartOpen,
+                setIsCartOpen,
             }}
         >
             {children}

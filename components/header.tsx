@@ -31,7 +31,7 @@ export function Header({
         activeCategorySlug,
     } = useCategorySidebar();
 
-    const { itemCount } = useCart();
+    const { itemCount, setIsCartOpen, } = useCart();
 
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isMobileCategoriesOpen, setIsMobileCategoriesOpen] =
@@ -133,6 +133,7 @@ export function Header({
 
                     <button
                         type="button"
+                        onClick={() => setIsCartOpen(true)}
                         aria-label="Varukorg"
                         className="relative text-foreground hover:text-muted-foreground"
                     >
@@ -163,6 +164,7 @@ export function Header({
 
                     <button
                         type="button"
+                        onClick={() => setIsCartOpen(true)}
                         aria-label="Varukorg"
                         className="relative text-foreground hover:text-muted-foreground"
                     >

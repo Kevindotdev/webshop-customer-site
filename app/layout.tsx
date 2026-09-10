@@ -9,6 +9,7 @@ import CategoryService from "@/services/category-service";
 import { Suspense } from "react";
 import { ServiceBenefits } from "@/components/service-benefits";
 import { CartProvider } from "@/components/cart-provider";
+import { CartDrawer } from "@/components/cart-drawer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -58,6 +59,8 @@ export default async function RootLayout({
                 <Footer />
               </div>
             </CategorySidebarProvider>
+
+            <CartDrawer />
           </CartProvider>
         </ThemeProvider>
       </body>
