@@ -30,6 +30,7 @@ export function ProductsFilter({
     const [minPriceInput, setMinPriceInput] = useState(minPrice);
     const [maxPriceInput, setMaxPriceInput] = useState(maxPrice);
 
+    // Only show brands available in the currently displayed products
     const brands = Array.from(
         new Set(
             products
@@ -38,6 +39,7 @@ export function ProductsFilter({
         ),
     ).sort();
 
+    // Used to show the reset button only when a filter is active
     const hasActiveFilters =
         stock !== "all" ||
         minPrice !== "" ||
@@ -46,6 +48,7 @@ export function ProductsFilter({
         brand !== "all" ||
         sort !== "default";
 
+    // Update the URL while keeping the current category and other filters
     const updateFilter = (
         name: string,
         value: string,
@@ -63,6 +66,7 @@ export function ProductsFilter({
         });
     };
 
+    // Clear listing filters while keeping the selected category/subcategory
     const clearFilters = () => {
         const params = new URLSearchParams(searchParams.toString());
 
@@ -88,6 +92,7 @@ export function ProductsFilter({
         );
     };
 
+    // Debounce price changes to avoid updating the URL on every keystroke
     useEffect(() => {
         const urlMinPrice = searchParams.get("minPrice") ?? "";
         const urlMaxPrice = searchParams.get("maxPrice") ?? "";
@@ -152,6 +157,7 @@ export function ProductsFilter({
                     )}
                 </button>
 
+                {/* Desktop filters are displayed inline above the product grid */}
                 <div className="hidden flex-1 flex-wrap items-center gap-3 md:flex">
                     <select
                         value={stock}
@@ -294,6 +300,7 @@ export function ProductsFilter({
                 </select>
             </div>
 
+            {/* Mobile filters are hidden until the filter button is opened */}
             <div
                 className={`mt-3 flex flex-wrap items-center gap-3 ${isFilterOpen ? "" : "hidden"
                     } md:hidden`}
