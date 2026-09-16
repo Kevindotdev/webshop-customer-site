@@ -1,4 +1,5 @@
 import { CategorySidebar } from "@/components/category-sidebar";
+import { ProductsFilter } from "@/components/products-filter";
 import { ProductsLoadMore } from "@/components/products-load-more";
 import { storeCategories } from "@/lib/store-categories";
 import CategoryService from "@/services/category-service";
@@ -51,6 +52,10 @@ export default async function ProductsPage({
                         {filteredProducts.length} produkter
                     </p>
                 </div>
+
+                <ProductsFilter
+                    products={filteredProducts}
+                />
 
                 <div className="mt-8">
                     <section className="mx-auto">
