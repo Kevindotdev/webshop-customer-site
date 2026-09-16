@@ -5,7 +5,8 @@ import {
     ChevronUp,
     SlidersHorizontal,
 } from "lucide-react";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import type { Product } from "@/app/types";
 
 interface ProductsFilterProps {
@@ -15,7 +16,19 @@ interface ProductsFilterProps {
 export function ProductsFilter({
     products,
 }: ProductsFilterProps) {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+
+    const stock = searchParams.get("stock") ?? "all";
+    const minPrice = searchParams.get("minPrice") ?? "";
+    const maxPrice = searchParams.get("maxPrice") ?? "";
+    const rating = searchParams.get("rating") ?? "all";
+    const brand = searchParams.get("brand") ?? "all";
+    const sort = searchParams.get("sort") ?? "default";
+
     const [isFilterOpen, setIsFilterOpen] = useState(false);
+    const [minPriceInput, setMinPriceInput] = useState(minPrice);
+    const [maxPriceInput, setMaxPriceInput] = useState(maxPrice);
 
     const brands = Array.from(
         new Set(
@@ -24,6 +37,89 @@ export function ProductsFilter({
                 .filter(Boolean),
         ),
     ).sort();
+
+    const hasActiveFilters =
+        stock !== "all" ||
+        minPrice !== "" ||
+        maxPrice !== "" ||
+        rating !== "all" ||
+        brand !== "all" ||
+        sort !== "default";
+
+    const updateFilter = (
+        name: string,
+        value: string,
+    ) => {
+        const params = new URLSearchParams(searchParams.toString());
+
+        if (!value || value === "all" || value === "default") {
+            params.delete(name);
+        } else {
+            params.set(name, value);
+        }
+
+        router.push(`/products?${params.toString()}`, {
+            scroll: false,
+        });
+    };
+
+    const clearFilters = () => {
+        const params = new URLSearchParams(searchParams.toString());
+
+        params.delete("stock");
+        params.delete("minPrice");
+        params.delete("maxPrice");
+        params.delete("rating");
+        params.delete("brand");
+        params.delete("sort");
+
+        setMinPriceInput("");
+        setMaxPriceInput("");
+
+        const query = params.toString();
+
+        router.push(
+            query
+                ? `/products?${query}`
+                : "/products",
+            {
+                scroll: false,
+            },
+        );
+    };
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            const params = new URLSearchParams(
+                searchParams.toString(),
+            );
+
+            if (minPriceInput) {
+                params.set("minPrice", minPriceInput);
+            } else {
+                params.delete("minPrice");
+            }
+
+            if (maxPriceInput) {
+                params.set("maxPrice", maxPriceInput);
+            } else {
+                params.delete("maxPrice");
+            }
+
+            router.push(`/products?${params.toString()}`, {
+                scroll: false,
+            });
+        }, 500);
+
+        return () => {
+            clearTimeout(timeout);
+        };
+    }, [
+        minPriceInput,
+        maxPriceInput,
+        router,
+        searchParams,
+    ]);
 
     return (
         <div className="mt-6">
@@ -48,8 +144,11 @@ export function ProductsFilter({
 
                 <div className="hidden flex-1 flex-wrap items-center gap-3 md:flex">
                     <select
+                        value={stock}
+                        onChange={(event) =>
+                            updateFilter("stock", event.target.value)
+                        }
                         className="h-9 rounded-md border border-border bg-surface px-3 text-sm text-foreground outline-none focus:border-accent"
-                        defaultValue="all"
                     >
                         <option value="all">
                             Alla lagerstatus
@@ -67,6 +166,10 @@ export function ProductsFilter({
                             type="number"
                             min={0}
                             step={1}
+                            value={minPriceInput}
+                            onChange={(event) =>
+                                setMinPriceInput(event.target.value)
+                            }
                             placeholder="Min pris"
                             className="h-9 w-24 rounded-md border border-border bg-surface px-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-accent"
                         />
@@ -79,14 +182,21 @@ export function ProductsFilter({
                             type="number"
                             min={0}
                             step={1}
+                            value={maxPriceInput}
+                            onChange={(event) =>
+                                setMaxPriceInput(event.target.value)
+                            }
                             placeholder="Max pris"
                             className="h-9 w-24 rounded-md border border-border bg-surface px-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-accent"
                         />
                     </div>
 
                     <select
+                        value={rating}
+                        onChange={(event) =>
+                            updateFilter("rating", event.target.value)
+                        }
                         className="h-9 rounded-md border border-border bg-surface px-3 text-sm text-foreground outline-none focus:border-accent"
-                        defaultValue="all"
                     >
                         <option value="all">
                             Alla betyg
@@ -109,8 +219,11 @@ export function ProductsFilter({
                     </select>
 
                     <select
+                        value={brand}
+                        onChange={(event) =>
+                            updateFilter("brand", event.target.value)
+                        }
                         className="h-9 rounded-md border border-border bg-surface px-3 text-sm text-foreground outline-none focus:border-accent"
-                        defaultValue="all"
                     >
                         <option value="all">
                             Alla varumärken
@@ -128,8 +241,11 @@ export function ProductsFilter({
                 </div>
 
                 <select
+                    value={sort}
+                    onChange={(event) =>
+                        updateFilter("sort", event.target.value)
+                    }
                     className="ml-auto h-9 rounded-md border border-border bg-surface px-3 text-sm text-foreground outline-none focus:border-accent"
-                    defaultValue="default"
                 >
                     <option value="default">
                         Sortera
@@ -163,8 +279,11 @@ export function ProductsFilter({
                     } md:hidden`}
             >
                 <select
+                    value={stock}
+                    onChange={(event) =>
+                        updateFilter("stock", event.target.value)
+                    }
                     className="h-9 rounded-md border border-border bg-surface px-3 text-sm text-foreground outline-none focus:border-accent"
-                    defaultValue="all"
                 >
                     <option value="all">
                         Alla lagerstatus
@@ -182,6 +301,10 @@ export function ProductsFilter({
                         type="number"
                         min={0}
                         step={1}
+                        value={minPriceInput}
+                        onChange={(event) =>
+                            setMinPriceInput(event.target.value)
+                        }
                         placeholder="Min pris"
                         className="h-9 w-24 rounded-md border border-border bg-surface px-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-accent"
                     />
@@ -194,14 +317,21 @@ export function ProductsFilter({
                         type="number"
                         min={0}
                         step={1}
+                        value={maxPriceInput}
+                        onChange={(event) =>
+                            setMaxPriceInput(event.target.value)
+                        }
                         placeholder="Max pris"
                         className="h-9 w-24 rounded-md border border-border bg-surface px-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-accent"
                     />
                 </div>
 
                 <select
+                    value={rating}
+                    onChange={(event) =>
+                        updateFilter("rating", event.target.value)
+                    }
                     className="h-9 rounded-md border border-border bg-surface px-3 text-sm text-foreground outline-none focus:border-accent"
-                    defaultValue="all"
                 >
                     <option value="all">
                         Alla betyg
@@ -224,8 +354,11 @@ export function ProductsFilter({
                 </select>
 
                 <select
+                    value={brand}
+                    onChange={(event) =>
+                        updateFilter("brand", event.target.value)
+                    }
                     className="h-9 rounded-md border border-border bg-surface px-3 text-sm text-foreground outline-none focus:border-accent"
-                    defaultValue="all"
                 >
                     <option value="all">
                         Alla varumärken
