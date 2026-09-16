@@ -238,6 +238,16 @@ export function ProductsFilter({
                             </option>
                         ))}
                     </select>
+
+                    {hasActiveFilters ? (
+                        <button
+                            type="button"
+                            onClick={clearFilters}
+                            className="h-9 rounded-md px-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                        >
+                            Rensa filter
+                        </button>
+                    ) : null}
                 </div>
 
                 <select
@@ -373,6 +383,16 @@ export function ProductsFilter({
                         </option>
                     ))}
                 </select>
+
+                {hasActiveFilters ? (
+                    <button
+                        type="button"
+                        onClick={clearFilters}
+                        className="h-9 rounded-md px-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                    >
+                        Rensa filter
+                    </button>
+                ) : null}
             </div>
         </div>
     );
