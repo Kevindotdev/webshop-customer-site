@@ -3,6 +3,7 @@
 import {
     createContext,
     useContext,
+    useEffect,
     useState,
     type ReactNode,
 } from "react";
@@ -26,6 +27,7 @@ interface CartContextValue {
     subtotal: number;
     isCartOpen: boolean;
     setIsCartOpen: (isOpen: boolean) => void;
+    isLoaded: boolean;
 }
 
 const CartContext = createContext<
@@ -45,10 +47,42 @@ export function CartProvider({
 }: {
     children: ReactNode;
 }) {
-    const [cartItems, setCartItems] = useState<CartItem[]>([]);
+    const [cartItems, setCartItems] =
+        useState<CartItem[]>([]);
 
     const [isCartOpen, setIsCartOpen] =
         useState(false);
+
+    const [isLoaded, setIsLoaded] =
+        useState(false);
+
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            const storedCart =
+                localStorage.getItem("cart");
+
+            if (storedCart) {
+                setCartItems(JSON.parse(storedCart));
+            }
+
+            setIsLoaded(true);
+        }, 0);
+
+        return () => {
+            clearTimeout(timeoutId);
+        };
+    }, []);
+
+    useEffect(() => {
+        if (!isLoaded) {
+            return;
+        }
+
+        localStorage.setItem(
+            "cart",
+            JSON.stringify(cartItems),
+        );
+    }, [cartItems, isLoaded]);
 
     function addToCart(product: Product) {
         const stock = product.stock;
@@ -152,6 +186,7 @@ export function CartProvider({
                 subtotal,
                 isCartOpen,
                 setIsCartOpen,
+                isLoaded,
             }}
         >
             {children}

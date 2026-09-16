@@ -43,10 +43,27 @@ export function CartDrawer() {
             return;
         }
 
+        const scrollbarWidth =
+            window.innerWidth -
+            document.documentElement.clientWidth;
+
+        const originalOverflow =
+            document.body.style.overflow;
+
+        const originalPaddingRight =
+            document.body.style.paddingRight;
+
         document.body.style.overflow = "hidden";
 
+        document.body.style.paddingRight =
+            `${scrollbarWidth}px`;
+
         return () => {
-            document.body.style.overflow = "";
+            document.body.style.overflow =
+                originalOverflow;
+
+            document.body.style.paddingRight =
+                originalPaddingRight;
         };
     }, [isCartOpen]);
 
@@ -88,7 +105,7 @@ export function CartDrawer() {
                 className="absolute inset-0 bg-black/40"
             />
 
-            <aside className="absolute inset-x-4 top-20 flex max-h-[calc(100vh-6rem)] flex-col overflow-hidden rounded-lg bg-surface shadow-xl md:inset-x-auto md:right-6 md:top-16 md:w-full md:max-w-xl">
+            <aside className="absolute inset-x-4 top-20 flex max-h-[calc(100vh-6rem)] flex-col overflow-hidden rounded-lg bg-surface shadow-xl md:inset-x-auto md:right-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))] md:top-16 md:w-full md:max-w-xl">
                 <div className="flex h-16 shrink-0 items-center justify-between border-b border-border px-6">
                     <h2 className="text-lg font-semibold">
                         Varukorg
@@ -98,7 +115,7 @@ export function CartDrawer() {
                         type="button"
                         aria-label="Stäng varukorg"
                         onClick={() => setIsCartOpen(false)}
-                        className="text-foreground hover:text-muted-foreground"
+                        className="text-foreground hover:text-muted-foreground cursor-pointer"
                     >
                         <X
                             className="h-5 w-5"
@@ -139,7 +156,10 @@ export function CartDrawer() {
                                         key={product.id}
                                         className="flex gap-4 border-b border-border pb-4"
                                     >
-                                        <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-md border border-border">
+                                        <a
+                                            href={`/products/${product.id}`}
+                                            className="flex h-20 w-20 shrink-0 items-center justify-center rounded-md border border-border"
+                                        >
                                             <Image
                                                 src={product.thumbnail}
                                                 alt={product.title}
@@ -147,13 +167,18 @@ export function CartDrawer() {
                                                 height={64}
                                                 className="max-h-16 max-w-16 object-contain"
                                             />
-                                        </div>
+                                        </a>
 
                                         <div className="min-w-0 flex-1">
                                             <div className="flex justify-between gap-4">
-                                                <div>
+                                                <div className="min-w-0 flex-1">
                                                     <h3 className="truncate text-sm font-medium">
-                                                        {product.title}
+                                                        <a
+                                                            href={`/products/${product.id}`}
+                                                            className="hover:underline"
+                                                        >
+                                                            {product.title}
+                                                        </a>
                                                     </h3>
 
                                                     <div className="mt-1 flex items-center gap-2">
@@ -187,59 +212,60 @@ export function CartDrawer() {
                                                     </p>
                                                 </div>
 
-                                                <button
-                                                    type="button"
-                                                    aria-label={`Ta bort ${product.title}`}
-                                                    onClick={() =>
-                                                        removeFromCart(
-                                                            product.id,
-                                                        )
-                                                    }
-                                                    className="h-fit text-muted-foreground hover:text-foreground"
-                                                >
-                                                    <Trash2
-                                                        className="h-4 w-4"
-                                                        strokeWidth={1.6}
-                                                    />
-                                                </button>
+                                                <div className="flex shrink-0 flex-col items-end gap-3">
+                                                    <button
+                                                        type="button"
+                                                        aria-label={`Ta bort ${product.title}`}
+                                                        onClick={() =>
+                                                            removeFromCart(
+                                                                product.id,
+                                                            )
+                                                        }
+                                                        className="h-fit text-muted-foreground hover:text-foreground cursor-pointer"
+                                                    >
+                                                        <Trash2
+                                                            className="h-4 w-4"
+                                                            strokeWidth={1.6}
+                                                        />
+                                                    </button>
+
+                                                    <div className="flex items-center gap-3">
+                                                        <button
+                                                            type="button"
+                                                            aria-label="Minska antal"
+                                                            onClick={() =>
+                                                                updateQuantity(
+                                                                    product.id,
+                                                                    quantity - 1,
+                                                                )
+                                                            }
+                                                            className="flex h-8 w-8 items-center justify-center rounded-md border border-border hover:bg-muted cursor-pointer"
+                                                        >
+                                                            <Minus className="h-3 w-3" />
+                                                        </button>
+
+                                                        <span className="w-5 text-center text-sm">
+                                                            {quantity}
+                                                        </span>
+
+                                                        <button
+                                                            type="button"
+                                                            aria-label="Öka antal"
+                                                            disabled={isAtMaxStock}
+                                                            onClick={() =>
+                                                                updateQuantity(
+                                                                    product.id,
+                                                                    quantity + 1,
+                                                                )
+                                                            }
+                                                            className="flex h-8 w-8 items-center justify-center rounded-md border border-border hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+                                                        >
+                                                            <Plus className="h-3 w-3" />
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
 
-                                            <div className="mt-3 flex items-center gap-3">
-                                                <button
-                                                    type="button"
-                                                    aria-label="Minska antal"
-                                                    onClick={() =>
-                                                        updateQuantity(
-                                                            product.id,
-                                                            quantity - 1,
-                                                        )
-                                                    }
-                                                    className="flex h-8 w-8 items-center justify-center rounded-md border border-border hover:bg-muted"
-                                                >
-                                                    <Minus className="h-3 w-3" />
-                                                </button>
-
-                                                <span className="w-5 text-center text-sm">
-                                                    {quantity}
-                                                </span>
-
-                                                <button
-                                                    type="button"
-                                                    aria-label="Öka antal"
-                                                    disabled={
-                                                        isAtMaxStock
-                                                    }
-                                                    onClick={() =>
-                                                        updateQuantity(
-                                                            product.id,
-                                                            quantity + 1,
-                                                        )
-                                                    }
-                                                    className="flex h-8 w-8 items-center justify-center rounded-md border border-border hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
-                                                >
-                                                    <Plus className="h-3 w-3" />
-                                                </button>
-                                            </div>
                                         </div>
                                     </div>
                                 );
@@ -290,14 +316,14 @@ export function CartDrawer() {
                             <button
                                 type="button"
                                 onClick={clearCart}
-                                className="rounded-md border border-border px-4 py-3 text-sm font-medium hover:bg-muted"
+                                className="rounded-md border border-border px-4 py-3 text-sm font-medium hover:bg-muted cursor-pointer"
                             >
                                 Rensa varukorgen
                             </button>
 
                             <button
                                 type="button"
-                                className="flex-1 rounded-md bg-purchase px-4 py-3 text-sm font-medium text-purchase-foreground hover:bg-purchase/90"
+                                className="flex-1 rounded-md bg-purchase px-4 py-3 text-sm font-medium text-purchase-foreground hover:bg-purchase/90 cursor-pointer"
                             >
                                 Till kassan
                             </button>

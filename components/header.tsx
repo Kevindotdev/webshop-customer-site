@@ -33,6 +33,9 @@ export function Header({
 
     const { itemCount, setIsCartOpen, } = useCart();
 
+    const [isMounted, setIsMounted] =
+        useState(false);
+
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isMobileCategoriesOpen, setIsMobileCategoriesOpen] =
         useState(false);
@@ -52,6 +55,16 @@ export function Header({
             storeCategory.slugs.includes(selectedSubcategory),
         )
         : undefined;
+
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            setIsMounted(true);
+        }, 0);
+
+        return () => {
+            clearTimeout(timeoutId);
+        };
+    }, []);
 
     useEffect(() => {
         if (!isMobileMenuOpen) {
@@ -135,14 +148,14 @@ export function Header({
                         type="button"
                         onClick={() => setIsCartOpen(true)}
                         aria-label="Varukorg"
-                        className="relative text-foreground hover:text-muted-foreground"
+                        className="relative text-foreground hover:text-muted-foreground cursor-pointer"
                     >
                         <ShoppingCart
                             className="h-5 w-5"
                             strokeWidth={1.6}
                         />
 
-                        {itemCount > 0 ? (
+                        {isMounted && itemCount > 0 ? (
                             <span className="absolute -right-2 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[10px] font-medium text-accent-foreground">
                                 {itemCount}
                             </span>
@@ -173,9 +186,11 @@ export function Header({
                             strokeWidth={1.6}
                         />
 
-                        <span className="absolute -right-2 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[10px] font-medium text-accent-foreground">
-                            3
-                        </span>
+                        {isMounted && itemCount > 0 ? (
+                            <span className="absolute -right-2 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[10px] font-medium text-accent-foreground">
+                                {itemCount}
+                            </span>
+                        ) : null}
                     </button>
 
                     <button
