@@ -1,5 +1,5 @@
 import { CategorySidebar } from "@/components/category-sidebar";
-import { ProductGrid } from "@/components/products-grid";
+import { ProductsLoadMore } from "@/components/products-load-more";
 import { storeCategories } from "@/lib/store-categories";
 import CategoryService from "@/services/category-service";
 import ProductService from "@/services/product-service";
@@ -16,7 +16,7 @@ export default async function ProductsPage({
 }: ProductsPageProps) {
     const { category, subcategory } = await searchParams;
 
-    const { products, total } = await ProductService.getAllProducts();
+    const { products } = await ProductService.getAllProducts();
     const categories = await CategoryService.getAllCategories();
 
     const selectedCategory = storeCategories.find(
@@ -48,15 +48,16 @@ export default async function ProductsPage({
                     </h1>
 
                     <p className="mt-1 text-sm text-muted-foreground">
-                        {selectedCategory
-                            ? `${filteredProducts.length} produkter`
-                            : `${total} produkter`}
+                        {filteredProducts.length} produkter
                     </p>
                 </div>
 
                 <div className="mt-8">
                     <section className="mx-auto">
-                        <ProductGrid products={filteredProducts} />
+                        <ProductsLoadMore
+                            key={category ?? subcategory ?? "all"}
+                            products={filteredProducts}
+                        />
                     </section>
                 </div>
             </main>
