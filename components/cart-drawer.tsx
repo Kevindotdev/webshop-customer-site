@@ -7,7 +7,7 @@ import {
     X,
 } from "lucide-react";
 import Image from "next/image";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useCart } from "./cart-provider";
 
 function formatPrice(price: number) {
@@ -37,6 +37,32 @@ export function CartDrawer() {
         isCartOpen,
         setIsCartOpen,
     } = useCart();
+
+    const [viewportHeight, setViewportHeight] =
+        useState<number | null>(null);
+
+    useEffect(() => {
+        const updateViewportHeight = () => {
+            setViewportHeight(
+                window.visualViewport?.height ??
+                window.innerHeight,
+            );
+        };
+
+        updateViewportHeight();
+
+        window.visualViewport?.addEventListener(
+            "resize",
+            updateViewportHeight,
+        );
+
+        return () => {
+            window.visualViewport?.removeEventListener(
+                "resize",
+                updateViewportHeight,
+            );
+        };
+    }, []);
 
     useEffect(() => {
         if (!isCartOpen) {
@@ -105,7 +131,16 @@ export function CartDrawer() {
                 className="absolute inset-0 bg-black/40"
             />
 
-            <aside className="absolute inset-x-4 top-20 flex max-h-[calc(100vh-6rem)] flex-col overflow-hidden rounded-lg bg-surface shadow-xl md:inset-x-auto md:right-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))] md:top-16 md:w-full md:max-w-xl">
+            <aside
+                style={
+                    viewportHeight
+                        ? {
+                            maxHeight: `${viewportHeight - 96}px`,
+                        }
+                        : undefined
+                }
+                className="absolute inset-x-4 top-20 flex max-h-[calc(100vh-6rem)] flex-col overflow-hidden rounded-lg bg-surface shadow-xl md:inset-x-auto md:right-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))] md:top-16 md:w-full md:max-w-xl"
+            >
                 <div className="flex h-16 shrink-0 items-center justify-between border-b border-border px-6">
                     <h2 className="text-lg font-semibold">
                         Varukorg
