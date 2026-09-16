@@ -159,23 +159,23 @@ export function ProductsFilter({
 
                 {/* Desktop filters are displayed inline above the product grid */}
                 <div className="hidden flex-1 flex-wrap items-center gap-3 md:flex">
-                    <select
-                        value={stock}
-                        onChange={(event) =>
-                            updateFilter("stock", event.target.value)
-                        }
-                        className="h-9 rounded-md border border-border bg-surface px-3 text-sm text-foreground outline-none focus:border-accent"
-                    >
-                        <option value="all">
-                            Alla lagerstatus
-                        </option>
-                        <option value="in-stock">
-                            I lager
-                        </option>
-                        <option value="out-of-stock">
-                            Slut i lager
-                        </option>
-                    </select>
+                    <label className="flex h-9 items-center gap-2 px-1 text-sm text-foreground">
+                        <input
+                            type="checkbox"
+                            checked={stock === "in-stock"}
+                            onChange={(event) =>
+                                updateFilter(
+                                    "stock",
+                                    event.target.checked ? "in-stock" : "all",
+                                )
+                            }
+                            className="h-4 w-4 accent-accent"
+                        />
+
+                        <span>
+                            Endast i lager
+                        </span>
+                    </label>
 
                     <div className="flex items-center gap-2">
                         <input
@@ -288,9 +288,6 @@ export function ProductsFilter({
                     <option value="discount-desc">
                         Mest prissänkt
                     </option>
-                    <option value="discount-asc">
-                        Minst prissänkt
-                    </option>
                     <option value="name-asc">
                         Namn: A–Ö
                     </option>
@@ -305,23 +302,23 @@ export function ProductsFilter({
                 className={`mt-3 flex flex-wrap items-center gap-3 ${isFilterOpen ? "" : "hidden"
                     } md:hidden`}
             >
-                <select
-                    value={stock}
-                    onChange={(event) =>
-                        updateFilter("stock", event.target.value)
-                    }
-                    className="h-9 rounded-md border border-border bg-surface px-3 text-sm text-foreground outline-none focus:border-accent"
-                >
-                    <option value="all">
-                        Alla lagerstatus
-                    </option>
-                    <option value="in-stock">
-                        I lager
-                    </option>
-                    <option value="out-of-stock">
-                        Slut i lager
-                    </option>
-                </select>
+                <label className="flex h-9 items-center gap-2 px-1 text-sm text-foreground">
+                    <input
+                        type="checkbox"
+                        checked={stock === "in-stock"}
+                        onChange={(event) =>
+                            updateFilter(
+                                "stock",
+                                event.target.checked ? "in-stock" : "all",
+                            )
+                        }
+                        className="h-4 w-4 accent-accent"
+                    />
+
+                    <span>
+                        Endast i lager
+                    </span>
+                </label>
 
                 <div className="flex items-center gap-2">
                     <input
