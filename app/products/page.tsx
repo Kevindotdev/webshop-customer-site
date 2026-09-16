@@ -77,13 +77,6 @@ export default async function ProductsPage({
             }
 
             if (
-                stock === "out-of-stock" &&
-                product.stock !== 0
-            ) {
-                return false;
-            }
-
-            if (
                 minPriceValue !== null &&
                 discountedPrice < minPriceValue
             ) {
@@ -155,14 +148,6 @@ export default async function ProductsPage({
             (a, b) =>
                 (b.discountPercentage ?? 0) -
                 (a.discountPercentage ?? 0),
-        );
-    }
-
-    if (sort === "discount-asc") {
-        filteredProducts.sort(
-            (a, b) =>
-                (a.discountPercentage ?? 0) -
-                (b.discountPercentage ?? 0),
         );
     }
 
