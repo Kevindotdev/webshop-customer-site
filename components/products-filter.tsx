@@ -89,6 +89,16 @@ export function ProductsFilter({
     };
 
     useEffect(() => {
+        const urlMinPrice = searchParams.get("minPrice") ?? "";
+        const urlMaxPrice = searchParams.get("maxPrice") ?? "";
+
+        if (
+            minPriceInput === urlMinPrice &&
+            maxPriceInput === urlMaxPrice
+        ) {
+            return;
+        }
+
         const timeout = setTimeout(() => {
             const params = new URLSearchParams(
                 searchParams.toString(),
