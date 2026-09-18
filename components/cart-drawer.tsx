@@ -7,7 +7,7 @@ import {
     X,
 } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useCart } from "./cart-provider";
 
 function formatPrice(price: number) {
@@ -40,6 +40,12 @@ export function CartDrawer() {
 
     const [viewportHeight, setViewportHeight] =
         useState<number | null>(null);
+
+    const dialogRef =
+        useRef<HTMLDialogElement | null>(null);
+
+    const triggerRef =
+        useRef<HTMLElement | null>(null);
 
     useEffect(() => {
         const updateViewportHeight = () => {
@@ -93,9 +99,53 @@ export function CartDrawer() {
         };
     }, [isCartOpen]);
 
-    if (!isCartOpen) {
-        return null;
-    }
+    useEffect(() => {
+        const dialog = dialogRef.current;
+
+        if (!dialog) {
+            return;
+        }
+
+        if (isCartOpen && !dialog.open) {
+            // Remember the element that opened the cart so focus can return to it when closed.
+            triggerRef.current =
+                document.activeElement as HTMLElement;
+
+            dialog.showModal();
+            return;
+        }
+
+        if (!isCartOpen && dialog.open) {
+            dialog.close();
+        }
+    }, [isCartOpen]);
+
+    useEffect(() => {
+        const dialog = dialogRef.current;
+
+        if (!dialog) {
+            return;
+        }
+
+        const handleClose = () => {
+            setIsCartOpen(false);
+
+            triggerRef.current?.focus();
+            triggerRef.current = null;
+        };
+
+        dialog.addEventListener(
+            "close",
+            handleClose,
+        );
+
+        return () => {
+            dialog.removeEventListener(
+                "close",
+                handleClose,
+            );
+        };
+    }, [setIsCartOpen]);
 
     const savings = cartItems.reduce(
         (total, item) => {
@@ -123,7 +173,11 @@ export function CartDrawer() {
     const subtotalExcludingVat = subtotal / 1.25;
 
     return (
-        <div className="fixed inset-0 z-60">
+        <dialog
+            ref={dialogRef}
+            aria-labelledby="cart-title"
+            className="fixed inset-0 z-60 m-0 h-full w-full max-w-none bg-transparent p-0"
+        >
             <button
                 type="button"
                 aria-label="Stäng varukorg"
@@ -142,7 +196,10 @@ export function CartDrawer() {
                 className="absolute inset-x-4 top-20 flex max-h-[calc(100vh-6rem)] flex-col overflow-hidden rounded-lg bg-surface shadow-xl md:inset-x-auto md:right-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))] md:top-16 md:w-full md:max-w-xl"
             >
                 <div className="flex h-16 shrink-0 items-center justify-between border-b border-border px-6">
-                    <h2 className="text-lg font-semibold">
+                    <h2
+                        id="cart-title"
+                        className="text-lg font-semibold"
+                    >
                         Varukorg
                     </h2>
 
@@ -366,6 +423,6 @@ export function CartDrawer() {
                     </div>
                 ) : null}
             </aside>
-        </div>
+        </dialog>
     );
 }
