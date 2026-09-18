@@ -25,10 +25,15 @@ A responsive customer-facing webshop built with Next.js, TypeScript and Tailwind
 - React 19.2.4
 - TypeScript
 - Tailwind CSS v4
-- Lucide React
-- next-themes
 - JSON Server
 - npm
+
+### Libraries
+
+- Lucide React - icons
+- Yet Another React Lightbox - product image gallery
+- @teispace/next-themes - light/dark theme handling
+- Concurrently — runs the application and mock API together
 
 ## Project Structure
 
