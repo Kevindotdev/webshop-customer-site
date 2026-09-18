@@ -1,8 +1,11 @@
+'use client';
+
 import { Check, Heart, ShoppingCart, X } from "lucide-react";
 import type { Product } from "@/app/types";
 import { formatPrice } from "@/lib/utils";
 import { RatingStars } from "./rating-stars";
 import Image from "next/image";
+import { useCart } from "./cart-provider";
 
 interface ProductCardProps {
     product: Product;
@@ -17,6 +20,8 @@ export function ProductCard({ product }: ProductCardProps) {
     const reviewCount = product.reviews?.length ?? 0;
     const isInStock = product.stock !== undefined && product.stock > 0;
 
+    const { addToCart } = useCart();
+
     return (
         <article className="group relative flex h-full min-w-0 flex-col overflow-hidden rounded-lg border border-border bg-surface">
             {/* Product image and information link to the product page. */}
@@ -24,7 +29,7 @@ export function ProductCard({ product }: ProductCardProps) {
                 href={`/products/${product.id}`}
                 className="flex flex-1 flex-col"
             >
-                <div className="relative aspect-[4/3] bg-muted">
+                <div className="relative aspect-4/3">
                     <Image
                         src={product.thumbnail}
                         alt={product.title}
@@ -108,7 +113,9 @@ export function ProductCard({ product }: ProductCardProps) {
                     <button
                         type="button"
                         aria-label={`Lägg ${product.title} i varukorg`}
-                        className="flex h-9 w-10 shrink-0 items-center justify-center rounded-md bg-accent text-accent-foreground transition-colors hover:bg-accent-hover cursor-pointer"
+                        onClick={() => addToCart(product)}
+                        disabled={!isInStock}
+                        className="flex h-9 w-10 shrink-0 cursor-pointer items-center justify-center rounded-md bg-purchase text-purchase-foreground transition-colors hover:bg-purchase-hover disabled:cursor-not-allowed disabled:opacity-50"
                     >
                         <ShoppingCart
                             className="h-4 w-4"

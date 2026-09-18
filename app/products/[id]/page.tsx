@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation";
 import ProductService from "@/services/product-service";
+import CategoryService from "@/services/category-service";
+import { CategorySidebar } from "@/components/category-sidebar";
 import { ProductGallery } from "@/components/product-gallery";
 import { ProductInfo } from "@/components/product-info";
 import { Breadcrumbs } from "@/components/breadcrumbs";
@@ -7,6 +9,7 @@ import { ProductPurchase } from "@/components/product-purchase";
 import { ProductDescription } from "@/components/product-description";
 import { ProductSpecifications } from "@/components/product-specifications";
 import { ProductReviews } from "@/components/product-reviews";
+import { ProductCategoryProvider } from "@/components/product-category-provider";
 
 interface ProductPageProps {
     params: Promise<{
@@ -32,9 +35,21 @@ export default async function ProductPage({
         notFound();
     }
 
+    const categories =
+        await CategoryService.getAllCategories();
+
     return (
-        <>
-            <main className="mx-auto w-full max-w-7xl px-6 py-8">
+        <div className="relative mx-auto w-full max-w-7xl">
+            <ProductCategoryProvider
+                activeCategorySlug={product.category?.slug}
+            />
+
+            <CategorySidebar
+                categories={categories}
+                activeCategorySlug={product.category?.slug}
+            />
+
+            <main className="flex-1 px-6 py-8">
                 <Breadcrumbs
                     category={product.category}
                     productTitle={product.title}
@@ -70,9 +85,11 @@ export default async function ProductPage({
                 </section>
 
                 <section className="mx-auto mt-22 max-w-2xl">
-                    <ProductReviews reviews={product.reviews} />
+                    <ProductReviews
+                        reviews={product.reviews}
+                    />
                 </section>
             </main>
-        </>
+        </div>
     );
 }

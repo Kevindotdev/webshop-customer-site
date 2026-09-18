@@ -16,6 +16,7 @@ import { useState, useEffect } from "react";
 import { storeCategories } from "@/lib/store-categories";
 import { Category } from "@/app/types";
 import { useSearchParams } from "next/navigation";
+import { useCart } from "./cart-provider";
 
 interface HeaderProps {
     categories: Category[];
@@ -27,7 +28,13 @@ export function Header({
     const {
         isCategorySidebarOpen,
         setIsCategorySidebarOpen,
+        activeCategorySlug,
     } = useCategorySidebar();
+
+    const { itemCount, setIsCartOpen, } = useCart();
+
+    const [isMounted, setIsMounted] =
+        useState(false);
 
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isMobileCategoriesOpen, setIsMobileCategoriesOpen] =
@@ -38,7 +45,26 @@ export function Header({
     const searchParams = useSearchParams();
 
     const selectedCategory = searchParams.get("category");
-    const selectedSubcategory = searchParams.get("subcategory");
+
+    const selectedSubcategory =
+        searchParams.get("subcategory") ??
+        activeCategorySlug;
+
+    const activeStoreCategory = selectedSubcategory
+        ? storeCategories.find((storeCategory) =>
+            storeCategory.slugs.includes(selectedSubcategory),
+        )
+        : undefined;
+
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            setIsMounted(true);
+        }, 0);
+
+        return () => {
+            clearTimeout(timeoutId);
+        };
+    }, []);
 
     useEffect(() => {
         if (!isMobileMenuOpen) {
@@ -120,17 +146,20 @@ export function Header({
 
                     <button
                         type="button"
+                        onClick={() => setIsCartOpen(true)}
                         aria-label="Varukorg"
-                        className="relative text-foreground hover:text-muted-foreground"
+                        className="relative text-foreground hover:text-muted-foreground cursor-pointer"
                     >
                         <ShoppingCart
                             className="h-5 w-5"
                             strokeWidth={1.6}
                         />
 
-                        <span className="absolute -right-2 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[10px] font-medium text-accent-foreground">
-                            3
-                        </span>
+                        {isMounted && itemCount > 0 ? (
+                            <span className="absolute -right-2 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[10px] font-medium text-accent-foreground">
+                                {itemCount}
+                            </span>
+                        ) : null}
                     </button>
                 </div>
 
@@ -148,6 +177,7 @@ export function Header({
 
                     <button
                         type="button"
+                        onClick={() => setIsCartOpen(true)}
                         aria-label="Varukorg"
                         className="relative text-foreground hover:text-muted-foreground"
                     >
@@ -156,9 +186,11 @@ export function Header({
                             strokeWidth={1.6}
                         />
 
-                        <span className="absolute -right-2 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[10px] font-medium text-accent-foreground">
-                            3
-                        </span>
+                        {isMounted && itemCount > 0 ? (
+                            <span className="absolute -right-2 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[10px] font-medium text-accent-foreground">
+                                {itemCount}
+                            </span>
+                        ) : null}
                     </button>
 
                     <button
@@ -168,9 +200,16 @@ export function Header({
 
                             setIsMobileMenuOpen(isOpeningMenu);
 
-                            if (isOpeningMenu && selectedCategory) {
-                                setIsMobileCategoriesOpen(true);
-                                setExpandedMobileCategory(selectedCategory);
+                            if (isOpeningMenu) {
+                                if (selectedCategory) {
+                                    setIsMobileCategoriesOpen(true);
+                                    setExpandedMobileCategory(selectedCategory);
+                                } else if (activeStoreCategory) {
+                                    setIsMobileCategoriesOpen(true);
+                                    setExpandedMobileCategory(
+                                        activeStoreCategory.name,
+                                    );
+                                }
                             }
                         }}
                         aria-label="Meny"
@@ -286,7 +325,6 @@ export function Header({
                                                                 );
 
                                                                 const isSelectedSubcategory =
-                                                                    selectedCategory === name &&
                                                                     selectedSubcategory === slug;
 
                                                                 return (

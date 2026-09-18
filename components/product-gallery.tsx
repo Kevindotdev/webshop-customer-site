@@ -160,7 +160,7 @@ export function ProductGallery({
             </div>
 
             {images.length > 1 ? (
-                <div className="mt-1 flex gap-3 overflow-x-auto">
+                <div className="mt-1 flex gap-3 overflow-x-auto px-1 md:justify-center">
                     {images.map((image, index) => (
                         <button
                             key={image}

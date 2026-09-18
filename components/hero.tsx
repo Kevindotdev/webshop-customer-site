@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export function Hero() {
     return (
         <section className="rounded-xl bg-muted p-8 md:p-10">
@@ -15,12 +17,12 @@ export function Hero() {
                         Snabb leverans och trygg e-handel.
                     </p>
 
-                    <a
-                        href="#products"
+                    <Link
+                        href="/products"
                         className="mt-6 inline-flex rounded-md bg-accent px-5 py-3 text-sm font-medium text-accent-foreground hover:bg-accent-hover"
                     >
                         Se alla produkter
-                    </a>
+                    </Link>
                 </div>
 
                 <div className="flex h-48 items-center justify-center rounded-lg bg-muted md:h-52">

@@ -11,7 +11,7 @@ export function ProductReviews({
     const reviewCount = reviews?.length ?? 0;
 
     return (
-        <section id="reviews">
+        <section id="reviews" className="scroll-mt-35">
             <h2 className="text-xl font-semibold">
                 Recensioner ({reviewCount})
             </h2>
