@@ -1,6 +1,5 @@
 import type { Product, ProductsResponse } from "@/app/types";
-
-const API_URL = "http://localhost:4000";
+import { API_URL } from "@/services/api";
 
 // Keep the homepage product count small while the full catalog uses pagination.
 const defaultLimit = 10;

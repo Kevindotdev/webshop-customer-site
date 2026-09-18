@@ -1,6 +1,5 @@
 import type { Category } from "@/app/types";
-
-const API_URL = "http://localhost:4000";
+import { API_URL } from "@/services/api";
 
 export default class CategoryService {
     static async getAllCategories(): Promise<Category[]> {
