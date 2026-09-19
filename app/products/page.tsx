@@ -4,6 +4,7 @@ import { ProductsLoadMore } from "@/components/products-load-more";
 import { storeCategories } from "@/lib/store-categories";
 import CategoryService from "@/services/category-service";
 import ProductService from "@/services/product-service";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 interface ProductsPageProps {
     searchParams: Promise<{
@@ -38,6 +39,12 @@ export default async function ProductsPage({
     const selectedCategory = storeCategories.find(
         (storeCategory) => storeCategory.name === category,
     );
+
+    const selectedSubcategory = subcategory
+        ? categories.find(
+            (storeCategory) => storeCategory.slug === subcategory,
+        )
+        : undefined;
 
     const categoryFilteredProducts = subcategory
         ? products.filter(
@@ -168,6 +175,11 @@ export default async function ProductsPage({
             <CategorySidebar categories={categories} />
 
             <main className="flex-1 px-6 py-8">
+                <Breadcrumbs
+                    storeCategory={selectedCategory}
+                    category={selectedSubcategory}
+                />
+
                 <div>
                     <h1 className="text-2xl font-bold">
                         {selectedCategory
