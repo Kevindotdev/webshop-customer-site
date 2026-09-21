@@ -22,7 +22,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Webshop",
+  title: {
+    template: "%s | Webshop",
+    default: "Webshop",
+  },
   description: "Browse our products",
 };
 
