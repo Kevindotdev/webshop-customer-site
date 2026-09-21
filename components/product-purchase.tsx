@@ -8,6 +8,7 @@ import {
 import type { Product } from "@/app/types";
 import { formatPrice } from "@/lib/utils";
 import { useCart } from "./cart-provider";
+import { useState } from "react";
 
 interface ProductPurchaseProps {
     product: Product;
@@ -17,6 +18,8 @@ export function ProductPurchase({
     product,
 }: ProductPurchaseProps) {
     const { addToCart } = useCart();
+
+    const [quantity, setQuantity] = useState(1);
 
     const discountPercentage =
         product.discountPercentage ?? 0;
@@ -87,6 +90,62 @@ export function ProductPurchase({
                     </p>
                 ) : null}
             </div>
+
+            {isInStock ? (
+                <div className="mt-5 flex items-center justify-center gap-2">
+                    <button
+                        type="button"
+                        onClick={() =>
+                            setQuantity((currentQuantity) =>
+                                Math.max(currentQuantity - 1, 1),
+                            )
+                        }
+                        disabled={quantity <= 1}
+                        className="flex h-10 w-10 items-center justify-center rounded-md border border-border text-foreground transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
+                        aria-label="Minska antal"
+                    >
+                        -
+                    </button>
+
+                    <input
+                        type="number"
+                        min={1}
+                        max={product.stock}
+                        value={quantity}
+                        onChange={(event) => {
+                            const value = Number(event.target.value);
+
+                            if (!Number.isNaN(value)) {
+                                setQuantity(
+                                    Math.min(
+                                        Math.max(value, 1),
+                                        product.stock ?? 1,
+                                    ),
+                                );
+                            }
+                        }}
+                        className="h-10 w-20 rounded-md border border-border bg-surface text-center text-sm text-foreground outline-none focus:border-accent"
+                        aria-label="Antal"
+                    />
+
+                    <button
+                        type="button"
+                        onClick={() =>
+                            setQuantity((currentQuantity) =>
+                                Math.min(
+                                    currentQuantity + 1,
+                                    product.stock ?? 1,
+                                ),
+                            )
+                        }
+                        disabled={quantity >= (product.stock ?? 1)}
+                        className="flex h-10 w-10 items-center justify-center rounded-md border border-border text-foreground transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
+                        aria-label="Öka antal"
+                    >
+                        +
+                    </button>
+                </div>
+            ) : null}
 
             <button
                 type="button"
