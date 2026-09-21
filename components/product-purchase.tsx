@@ -8,6 +8,7 @@ import {
 import type { Product } from "@/app/types";
 import { formatPrice } from "@/lib/utils";
 import { useCart } from "./cart-provider";
+import { useState } from "react";
 
 interface ProductPurchaseProps {
     product: Product;
@@ -17,6 +18,8 @@ export function ProductPurchase({
     product,
 }: ProductPurchaseProps) {
     const { addToCart } = useCart();
+
+    const [quantity, setQuantity] = useState(1);
 
     const discountPercentage =
         product.discountPercentage ?? 0;
@@ -88,19 +91,79 @@ export function ProductPurchase({
                 ) : null}
             </div>
 
-            <button
-                type="button"
-                onClick={() => addToCart(product)}
-                disabled={!isInStock}
-                className="mt-6 flex h-11 w-full items-center justify-center gap-2 rounded-md bg-purchase text-sm font-medium text-purchase-foreground transition-colors hover:bg-purchase-hover disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
-            >
-                <ShoppingCart
-                    className="h-5 w-5"
-                    strokeWidth={1.7}
-                />
+            <div className="mt-5 flex items-center gap-2 lg:flex-col">
+                {isInStock ? (
+                    <div className="flex shrink-0 items-center justify-center gap-2">
+                        <button
+                            type="button"
+                            onClick={() =>
+                                setQuantity((currentQuantity) =>
+                                    Math.max(currentQuantity - 1, 1),
+                                )
+                            }
+                            disabled={quantity <= 1}
+                            className="flex h-10 w-10 items-center justify-center rounded-md border border-border text-foreground transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
+                            aria-label="Minska antal"
+                        >
+                            -
+                        </button>
 
-                Lägg i varukorg
-            </button>
+                        <input
+                            type="number"
+                            min={1}
+                            max={product.stock}
+                            value={quantity}
+                            onChange={(event) => {
+                                const value = Number(event.target.value);
+
+                                if (!Number.isNaN(value)) {
+                                    setQuantity(
+                                        Math.min(
+                                            Math.max(value, 1),
+                                            product.stock ?? 1,
+                                        ),
+                                    );
+                                }
+                            }}
+                            className="h-10 w-16 appearance-none rounded-md border border-border bg-surface text-center text-sm text-foreground outline-none focus:border-accent [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                            aria-label="Antal"
+                        />
+
+                        <button
+                            type="button"
+                            onClick={() =>
+                                setQuantity((currentQuantity) =>
+                                    Math.min(
+                                        currentQuantity + 1,
+                                        product.stock ?? 1,
+                                    ),
+                                )
+                            }
+                            disabled={
+                                quantity >= (product.stock ?? 1)
+                            }
+                            className="flex h-10 w-10 items-center justify-center rounded-md border border-border text-foreground transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
+                            aria-label="Öka antal"
+                        >
+                            +
+                        </button>
+                    </div>
+                ) : null}
+
+                <button
+                    type="button"
+                    onClick={() => addToCart(product, quantity)}
+                    disabled={!isInStock}
+                    className="flex h-11 flex-1 items-center justify-center gap-2 rounded-md bg-purchase text-sm font-medium text-purchase-foreground transition-colors hover:bg-purchase-hover disabled:cursor-not-allowed disabled:opacity-50 lg:w-full lg:flex-none"
+                >
+                    <ShoppingCart
+                        className="h-5 w-5"
+                        strokeWidth={1.7}
+                    />
+
+                    Lägg i varukorg
+                </button>
+            </div>
         </aside>
     );
 }
