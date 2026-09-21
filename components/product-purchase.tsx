@@ -55,9 +55,9 @@ export function ProductPurchase({
                 </p>
             </div>
 
-            <div className="mt-5 border-t border-border pt-5 justify-items-center">
+            <div className="mt-5 border-t border-border pt-5 text-center">
                 {isInStock ? (
-                    <div className="flex items-center gap-2 text-sm">
+                    <div className="flex items-center justify-center gap-2 text-sm">
                         <Check
                             className="h-5 w-5 shrink-0 text-success"
                             strokeWidth={2}
@@ -72,7 +72,7 @@ export function ProductPurchase({
                         </span>
                     </div>
                 ) : (
-                    <div className="flex items-center gap-2 text-sm font-medium text-destructive">
+                    <div className="flex items-center justify-center gap-2 text-sm font-medium text-destructive">
                         <X
                             className="h-5 w-5 shrink-0"
                             strokeWidth={2}
