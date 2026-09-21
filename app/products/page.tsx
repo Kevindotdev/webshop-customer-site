@@ -5,6 +5,7 @@ import { storeCategories } from "@/lib/store-categories";
 import CategoryService from "@/services/category-service";
 import ProductService from "@/services/product-service";
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import { Metadata } from "next";
 
 interface ProductsPageProps {
     searchParams: Promise<{
@@ -17,6 +18,38 @@ interface ProductsPageProps {
         brand?: string;
         sort?: string;
     }>;
+}
+
+export async function generateMetadata({
+    searchParams,
+}: ProductsPageProps): Promise<Metadata> {
+    const {
+        category,
+        subcategory,
+    } = await searchParams;
+
+    const categories =
+        await CategoryService.getAllCategories();
+
+    const selectedCategory = storeCategories.find(
+        (storeCategory) => storeCategory.name === category,
+    );
+
+    const selectedSubcategory = subcategory
+        ? categories.find(
+            (category) => category.slug === subcategory,
+        )
+        : undefined;
+
+    const title =
+        selectedSubcategory?.name ??
+        selectedCategory?.name ??
+        "Produkter";
+
+    return {
+        title,
+        description: `Utforska ${title.toLowerCase()} hos Webshop.`,
+    };
 }
 
 export default async function ProductsPage({
