@@ -149,7 +149,7 @@ export function ProductPurchase({
 
             <button
                 type="button"
-                onClick={() => addToCart(product)}
+                onClick={() => addToCart(product, quantity)}
                 disabled={!isInStock}
                 className="mt-6 flex h-11 w-full items-center justify-center gap-2 rounded-md bg-purchase text-sm font-medium text-purchase-foreground transition-colors hover:bg-purchase-hover disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
             >

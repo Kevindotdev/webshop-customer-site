@@ -16,7 +16,10 @@ interface CartItem {
 
 interface CartContextValue {
     cartItems: CartItem[];
-    addToCart: (product: Product) => void;
+    addToCart: (
+        product: Product,
+        quantity?: number,
+    ) => void;
     removeFromCart: (productId: number) => void;
     updateQuantity: (
         productId: number,
@@ -84,7 +87,10 @@ export function CartProvider({
         );
     }, [cartItems, isLoaded]);
 
-    function addToCart(product: Product) {
+    function addToCart(
+        product: Product,
+        quantity = 1,
+    ) {
         const stock = product.stock;
 
         if (!stock || stock <= 0) {
@@ -105,7 +111,7 @@ export function CartProvider({
                     return {
                         ...item,
                         quantity: Math.min(
-                            item.quantity + 1,
+                            item.quantity + quantity,
                             stock,
                         ),
                     };
@@ -116,7 +122,7 @@ export function CartProvider({
                 ...currentItems,
                 {
                     product,
-                    quantity: 1,
+                    quantity: Math.min(quantity, stock),
                 },
             ];
         });
