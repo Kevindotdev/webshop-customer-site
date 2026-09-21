@@ -10,11 +10,36 @@ import { ProductDescription } from "@/components/product-description";
 import { ProductSpecifications } from "@/components/product-specifications";
 import { ProductReviews } from "@/components/product-reviews";
 import { ProductCategoryProvider } from "@/components/product-category-provider";
+import { Metadata } from "next";
 
 interface ProductPageProps {
     params: Promise<{
         id: string;
     }>;
+}
+
+export async function generateMetadata({
+    params,
+}: ProductPageProps): Promise<Metadata> {
+    const { id } = await params;
+
+    const productId = Number(id);
+
+    if (Number.isNaN(productId)) {
+        return {};
+    }
+
+    const product =
+        await ProductService.getProductById(productId);
+
+    if (!product) {
+        return {};
+    }
+
+    return {
+        title: product.title,
+        description: product.description,
+    };
 }
 
 export default async function ProductPage({
