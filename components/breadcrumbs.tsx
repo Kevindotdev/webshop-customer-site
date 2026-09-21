@@ -5,11 +5,13 @@ import { ChevronRight, Home } from "lucide-react";
 
 interface BreadcrumbsProps {
     category?: Category;
-    productTitle: string;
+    storeCategory?: typeof storeCategories[number];
+    productTitle?: string;
 }
 
 export function Breadcrumbs({
     category,
+    storeCategory,
     productTitle,
 }: BreadcrumbsProps) {
     const parentCategory = category
@@ -45,7 +47,7 @@ export function Breadcrumbs({
                 Produkter
             </Link>
 
-            {parentCategory ? (
+            {(storeCategory || parentCategory) ? (
                 <>
                     <ChevronRight
                         className="h-4 w-4 shrink-0"
@@ -53,10 +55,12 @@ export function Breadcrumbs({
                     />
 
                     <Link
-                        href={`/products?category=${encodeURIComponent(parentCategory.name)}`}
+                        href={`/products?category=${encodeURIComponent(
+                            (storeCategory ?? parentCategory)!.name,
+                        )}`}
                         className="shrink-0 hover:text-foreground"
                     >
-                        {parentCategory.name}
+                        {(storeCategory ?? parentCategory)!.name}
                     </Link>
                 </>
             ) : null}
@@ -76,15 +80,6 @@ export function Breadcrumbs({
                     </Link>
                 </>
             ) : null}
-
-            <ChevronRight
-                className="h-4 w-4 shrink-0"
-                strokeWidth={1.5}
-            />
-
-            <span className="truncate text-foreground">
-                {productTitle}
-            </span>
         </nav>
     );
 }
